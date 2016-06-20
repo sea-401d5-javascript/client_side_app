@@ -41,12 +41,13 @@ FrenchieController.prototype.deleteFrenchies = function(frenchie) {
 };
 
 FrenchieController.prototype.updateFrenchie = function(frenchie, updatedFrenchie) {
-  //frenchie.data = updatedFrenchie.data;
-  this.$http.put('http://localhost:3000/frenchie')
+  frenchie.name = updatedFrenchie.name;
+  frenchie.dogWalkers_bitten = updatedFrenchie.dogWalkers_bitten;
+  this.$http.put('http://localhost:3000/frenchie', frenchie)
   .then(() => {
-    let arrayF = this.frenchies[this.frenchies.indexOf(frenchie)];
-    arrayF.body = updatedFrenchie;
-    console.log(updatedFrenchie);
+    this.frenchies = this.frenchies.map(nf => {
+      return nf._id === frenchie._id ? frenchie : nf;
+    });
   }, (err) => {
     console.log(err);
   });
@@ -90,19 +91,32 @@ DogwalkerController.prototype.deleteDW = function(dogwalker) {
   });
 };
 
-app.controller('mixedController', mixedController);
-
-function mixedController($http) {
-  this.$http = $http;
-  this.mixed = [];
-}
-
-mixedController.prototype.death = function() {
-  console.log('death is coming');
-  this.$http.get('http://localhost:3000/unfortunate')
-  .then((res) => {
-    this.mixed = res.data.message;
+DogwalkerController.prototype.updateDW = function(dogwalker, updatedDogwalker) {
+  dogwalker.name = updatedDogwalker.name;
+  dogwalker.dogs_died = updatedDogwalker.dogs_died;
+  this.$http.put('http://localhost:3000/dogwalkers', dogwalker)
+  .then(() => {
+    this.dogwalkers = this.dogwalkers.map(ndw => {
+      return ndw._id === dogwalker._id ? dogwalker : ndw;
+    });
   }, (err) => {
     console.log(err);
   });
 };
+
+// app.controller('mixedController', mixedController);
+//
+// function mixedController($http) {
+//   this.$http = $http;
+//   this.mixed = [];
+// }
+//
+// mixedController.prototype.death = function() {
+//   console.log('death is coming');
+//   this.$http.get('http://localhost:3000/unfortunate')
+//   .then((res) => {
+//     this.mixed = res.data.message;
+//   }, (err) => {
+//     console.log(err);
+//   });
+// };

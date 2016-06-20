@@ -12,7 +12,12 @@
           NAME: {{frenchie.name}} and DOGWALKERS BITTEN: {{frenchie.dogWalkers_bitten}}
           <button ng-click="frenchie.editing = !frenchie.editing">EDIT</button>
           <form ng-hide="!frenchie.editing" ng-submit="frenchiectrl.updateFrenchie(frenchie, updatedFrenchie)">
-            <input type="text" ng-model="updatedFrenchie"/>
+          <label> NAME:
+            <input type="text" ng-model="updatedFrenchie.name"/>
+          </label>
+          <label> BITTEN:
+            <input type="text" ng-model="updatedFrenchie.dogWalkers_bitten"/>
+          </label>
             <button type="submit">UPDATE </button>
             <button ng-click="frenchiectrl.deleteFrenchies(frenchie)">DELETE</button>
           </form>
@@ -35,7 +40,12 @@
           NAME: {{dogwalker.name}} and DOGS DIED: {{dogwalker.dogs_died}}
           <button ng-click="dogwalker.editing = !dogwalker.editing">EDIT</button>
           <form ng-hide="!dogwalker.editing" ng-submit="dogwalkerctrl.updateDW(dogwalker, updatedDogwalker)">
-            <input type="text" ng-model="updatedDogwalker"/>
+            <label> NAME:
+            <input type="text" ng-model="updatedDogwalker.name"/>
+          </label>
+          <label> DOGS DIED:
+            <input text="text" ng-model="updatedDogwalker.dogs_died"/>
+          </label>
             <button type="submit">UPDATE</button>
             <button ng-click="dogwalkerctrl.deleteDW(dogwalker)">DELETE</button>
           </form>
