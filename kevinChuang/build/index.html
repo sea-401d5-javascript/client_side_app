@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <title>Treats Galore</title>
   </head>
-  <body ng-app="treatApp">
+  <body ng-app="treatApp" ng-cloak>
     <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getCookies()">
       <h1>Cookies</h1>
         <ul>
           <li ng-repeat="treat in treatctrl.treats">
-            Type: {{treat.type}}, Edible: {{treat.edible}}, Stock: {{treat.stock}}
+            Name: {{treat.name}}, Edible: {{treat.edible}}, Stock: {{treat.stock}}
             <button ng-click="cookie.edit = !cookie.edit">Edit</button>
-            <form ng-hide="!cookie.edit"ng-submit="treatctrl.updateCookie(cookie,updateCookie)">
-              <label>Type:
-                <input type="text" ng-model="updateCookie.type">
+            <form ng-hide="!cookie.edit" ng-submit="treatctrl.updateCookie(cookie,updateCookie)">
+              <label>Name:
+                <input type="text" ng-model="updateCookie.name">
               </label>
               <label>Edible:
                 <input type="text" ng-model="updateCookie.edible">
@@ -22,14 +22,16 @@
                 <input type="text" ng-model="updateCookie.stock">
               </label>
               <button type="submit">Update</button>
-              <button ng-click="treatctrl.deleteCookie(treat)"></button>
+              <button ng-click="treatctrl.deleteCookie(treat)">Delete</button>
             </form>
           </li>
         </ul>
 
         <form ng-submit="treatctrl.addCookie()">
-          <input type="text" ng-model="treat.type" placeholder="type">
-
+          <input type="text" ng-model="treatctrl.newCookie.name" placeholder="name">
+          <input type="text" ng-model="treatctrl.newCookie.edible" placeholder="edibility">
+          <input type="text" ng-model="treatctrl.newCookie.stock" placeholder="stock">
+          <button type="submit">Submit</button>
         </form>
     </main>
     <script src="./bundle.js" charset="utf-8"></script>
