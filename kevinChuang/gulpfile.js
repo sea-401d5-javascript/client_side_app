@@ -4,10 +4,27 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
+const webpack = require('webpack-stream');
 
-gulp.task('default',['lint','Mochai','watch'], () => {
-
+gulp.task('copy', ()=> {
+  return gulp.src('./app/**/**/*')
+    .pipe(gulp.dest('build/'));
 });
+
+gulp.task('bundle', ()=> {
+  return gulp.src('./app/js/client.js')
+    .pipe(webpack({
+      output: {
+        filename: 'bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('build/'));
+});
+
+gulp.task('build',['copy','bundle']);
+
+
+gulp.task('default',['lint','Mochai','watch'], () => {});
 
 gulp.task('lint', () => {
   gulp.src([
@@ -30,6 +47,7 @@ gulp.task('Mochai', () => {
   gulp.src('./test/*.js')
   .pipe(mocha());
 });
+
 
 gulp.task('watch', () => {
   gulp.watch(['./*.js','./test*.js'],['lint','Mochai']);

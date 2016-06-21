@@ -12,7 +12,7 @@ const request = chai.request;
 const dbPort = process.env.MONGOLAB_URI;
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/test_db';
-require('../server');
+require('../api-server');
 
 describe('Non-data candy tests',() => {
   after((done) => {
