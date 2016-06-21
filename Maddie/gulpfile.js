@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
+const del = require('del');
 
 const paths = {
   html: __dirname + '/app/index.html',
@@ -9,7 +10,7 @@ const paths = {
 
 
 gulp.task('clean', () => {
-  return gulp.src('./build/**/*');
+  return del('./build/**/*');
 });
 
 gulp.task('copy', () => {
