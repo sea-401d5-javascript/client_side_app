@@ -42,6 +42,8 @@ router.post('/', bodyParser, (req, res, next)=> {
 });
 
 router.put('/', bodyParser, (req, res, next)=> {
+  console.log('hit put route');
+  console.log(req.body);
   var _id  =req.body._id;
   Cookie.findOneAndUpdate({_id},req.body,(err,crumbs)=> {
     if (err) return next(err);

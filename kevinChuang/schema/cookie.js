@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 
 const Cookie = mongoose.Schema({
   name: String,
-  edible: Boolean,
   stock: {
     type: Number,
     default: 1
