@@ -11,10 +11,9 @@ const dbPort = process.env.MONGOLAB_URI || 'mongodb://localhost/dev_db';
 
 mongoose.connect(dbPort);
 
-app.use(cors());
-app.use('/cookies', cookieRouter);
-app.use('/candy', candyRouter);
-app.use('/', authRoute);
+app.use('/cookies', cors(), cookieRouter);
+app.use('/candy', cors(), candyRouter);
+app.use('/', cors(), authRoute);
 
 
 app.use((err,req,res,next)=> {
