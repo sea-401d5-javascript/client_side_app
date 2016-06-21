@@ -12,6 +12,7 @@
     "angular": "^1.5.7",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.1",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "jsonwebtoken": "^7.0.0",
     "mongoose": "^4.4.19"
@@ -20,7 +21,6 @@
     "angular-mocks": "^1.5.7",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
-    "cors": "^2.7.1",
     "css-loader": "^0.23.1",
     "del": "^2.2.0",
     "gulp": "^3.9.1",

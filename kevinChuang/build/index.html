@@ -5,13 +5,24 @@
     <title>Treats Galore</title>
   </head>
   <body ng-app="treatApp">
-    <main ng-controller="TreatController as treatctrl" ng-init="treatctrl.getCookies()">
+    <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getCookies()">
       <h1>Cookies</h1>
         <ul>
           <li ng-repeat="treat in treatctrl.treats">
-            {{treat.type}}
-            <form ng-submit="treatctrl.updateCookie()">
-
+            Type: {{treat.type}}, Edible: {{treat.edible}}, Stock: {{treat.stock}}
+            <button ng-click="cookie.edit = !cookie.edit">Edit</button>
+            <form ng-hide="!cookie.edit"ng-submit="treatctrl.updateCookie(cookie,updateCookie)">
+              <label>Type:
+                <input type="text" ng-model="updateCookie.type">
+              </label>
+              <label>Edible:
+                <input type="text" ng-model="updateCookie.edible">
+              </label>
+              <label>Stock:
+                <input type="text" ng-model="updateCookie.stock">
+              </label>
+              <button type="submit">Update</button>
+              <button ng-click="treatctrl.deleteCookie(treat)"></button>
             </form>
           </li>
         </ul>

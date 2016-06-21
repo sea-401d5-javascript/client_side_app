@@ -1,18 +1,17 @@
-/*jshint esversion:6*/
-/*eslint-env es6*/
+'use strict';
 
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
-
-const dbPort = process.env.MONGOLAB_URI || 'mongodb://localhost/dev_db';
-mongoose.connect(dbPort);
-
 const cookieRouter = require('./routes/cookieRouter.js');
 const candyRouter = require('./routes/candyRouter.js');
 const authRoute = require('./routes/auth_route.js');
+const dbPort = process.env.MONGOLAB_URI || 'mongodb://localhost/dev_db';
 
+mongoose.connect(dbPort);
+
+app.use(cors());
 app.use('/cookies', cookieRouter);
 app.use('/candy', candyRouter);
 app.use('/', authRoute);

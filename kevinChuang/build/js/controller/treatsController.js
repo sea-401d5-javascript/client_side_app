@@ -4,8 +4,8 @@ module.exports = function(app) {
 
 
 function TreatsController($http) {
-  const cookieUrl = 'localhost:3000/cookies';
-  const candyUrl = 'localhost:3000/candy';
+  const cookieUrl = 'http://localhost:3000/cookies';
+  const candyUrl = 'http://localhost:3000/candy';
   this.treats = [];
 
   // GET routes------------------------------------
