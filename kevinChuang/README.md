@@ -1,2 +1,2 @@
-# Two Rest Api project
+# Angular Rest API
 ## By Kevin Chuang
