@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 
 const Candy = mongoose.Schema({
   name: String,
-  edible: Boolean,
   stock: {
     type: Number,
     default: 1
