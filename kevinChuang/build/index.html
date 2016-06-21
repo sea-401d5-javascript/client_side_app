@@ -34,6 +34,36 @@
           <button type="submit">Submit</button>
         </form>
     </main>
+
+    <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getCandy()">
+      <h1>Candy</h1>
+        <ul>
+          <li ng-repeat="treat in treatctrl.treats">
+            Name: {{treat.name}}, Edible: {{treat.edible}}, Stock: {{treat.stock}}
+            <button ng-click="candy.edit = !candy.edit">Edit</button>
+            <form ng-hide="!candy.edit" ng-submit="treatctrl.updateCandy(candy,updateCandy)">
+              <label>Name:
+                <input type="text" ng-model="updateCandy.name">
+              </label>
+              <label>Edible:
+                <input type="text" ng-model="updateCandy.edible">
+              </label>
+              <label>Stock:
+                <input type="text" ng-model="updateCandy.stock">
+              </label>
+              <button type="submit">Update</button>
+              <button ng-click="treatctrl.deleteCandy(treat)">Delete</button>
+            </form>
+          </li>
+        </ul>
+
+        <form ng-submit="treatctrl.addCandy()">
+          <input type="text" ng-model="treatctrl.newCandy.name" placeholder="name">
+          <input type="text" ng-model="treatctrl.newCandy.edible" placeholder="edibility">
+          <input type="text" ng-model="treatctrl.newCandy.stock" placeholder="stock">
+          <button type="submit">Submit</button>
+        </form>
+    </main>
     <script src="./bundle.js" charset="utf-8"></script>
   </body>
 </html>

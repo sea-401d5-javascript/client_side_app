@@ -31602,13 +31602,13 @@
 
 	// PUT routes------------------------------------
 	TreatsController.prototype.updateCookie = function(cookie, updateCookie) {
-	  cookie.name = updateCookie.name;
-	  cookie.edible = updateCookie.edible;
-	  cookie.stock = updateCookie.stock;
+	  if (updateCookie.name) cookie.name = updateCookie.name;
+	  if (updateCookie.edible) cookie.edible = updateCookie.edible;
+	  if (updateCookie.stock) cookie.stock = updateCookie.stock;
 	  this.$http.put(this.cookieUrl, cookie)
 	    .then(()=> {
-	      this.treats = this.treats.map(c => {
-	        return c._id === cookie._id ? cookie : c;
+	      this.treats = this.treats.map(co => {
+	        return co._id === cookie._id ? cookie : co;
 	      });
 	    }, (err) => {
 	      console.log(err);
@@ -31616,13 +31616,13 @@
 	};
 
 	TreatsController.prototype.updateCandy = function(candy, updateCandy) {
-	  candy.name = updateCandy.name;
-	  candy.edible = updateCandy.edible;
-	  candy.stock = updateCandy.stock;
+	  if (updateCandy.name) candy.name = updateCandy.name;
+	  if (updateCandy.edible) candy.edible = updateCandy.edible;
+	  if (updateCandy.stock) candy.stock = updateCandy.stock;
 	  this.$http.put(this.candyUrl, candy)
 	    .then(()=> {
-	      this.treats = this.treats.map(c => {
-	        return c._id === candy._id ? candy : c;
+	      this.treats = this.treats.map(ca => {
+	        return ca._id === candy._id ? candy : ca;
 	      });
 	    }, (err) => {
 	      console.log(err);
