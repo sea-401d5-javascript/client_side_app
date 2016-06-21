@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Performances and Venues</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+
+<body data-ng-app="PerformanceApp">
+
+    <main>
+      <div data-ng-controller="PerformanceController as perfctrl" ng-cloak data-ng-init="perfctrl.getPerformances()">
+        <h1>Performances:</h1>
+        <ul>
+          <li ng-repeat="performance in perfctrl.performances">
+            <h2>{{performance.name}}</h2>
+            <p>
+              {{performance.startDate}} to {{performance.endDate}}
+            </p>
+            <button ng-click="performance.showVenue = !performance.showVenue">{{performance.venue}}</button>
+              <ul ng-hide="!performance.showVenue">
+                <li>Neighborhood: {{performance.venueObject[0].neighborhood}}</li>
+                <li>Serves Alcohol: {{performance.venueObject[0].servesAlcohol}}</li>
+              </ul>
+            <button ng-click="performance.editing = !performance.editing">EDIT</button>
+              <button ng-hide="!performance.editing" ng-click="perfctrl.deletePerformance(performance)">Delete</button>
+              <form ng-hide="!performance.editing" ng-submit="perfctrl.updatePerformance(performance, updatedPerformance)">
+                <input type="text" ng-model="updatedPerformance.name"/>
+                <input type="text" ng-model="updatedPerformance.venue"/>
+                <input type="date" ng-model="updatedPerformance.startDate"/>
+                <input type="date" ng-model="updatedPerformance.endDate"/>
+                <button type="submit">Update Performance</button>
+              </form>
+          </li>
+        </ul>
+        <form ng-submit="perfctrl.addPerformance()">
+          <input ng-model="perfctrl.newPerformance.name" type="text">
+          <input ng-model="perfctrl.newPerformance.venue" type="text">
+          <input ng-model="perfctrl.newPerformance.startDate" type="date">
+          <input ng-model="perfctrl.newPerformance.endDate" type="date">
+          <button type="submit">Add New Performance</button>
+        </form>
+      </div>
+      <div data-ng-controller="VenueController as venuectrl" data-ng-init="venuectrl.getVenues()">
+        <h1>Venues</h1>
+        <ul>
+          <li ng-repeat="venue in venuectrl.venues">
+            <h2>{{venue.name}}</h2>
+              <p>{{venue.neighborhood}}</p>
+              <p>Serves Alcohol: {{venue.servesAlcohol}}</p>
+              <button ng-click="venue.editing = !venue.editing">Edit</button>
+                <button ng-hide="!venue.editing" ng-click="venuectrl.deleteVenue(venue)">Delete</button>
+                <form ng-hide="!venue.editing" ng-submit="venuectrl.updateVenue(venue, updatedVenue)">
+                  <input type="text" ng-model="updatedVenue.name"/>
+                  <input type="text" ng-model="updatedVenue.neighborhood"/>
+                  <input type="boolean" ng-model="updatedVenue.servesAlcohol"/>
+                  <button type="submit">Update Venue</button>
+                </form>
+          </li>
+        </ul>
+        <form ng-submit="venuectrl.addVenue()">
+          <input ng-model="venuectrl.newVenue.name" type="text">
+          <input ng-model="venuectrl.newVenue.neighborhood" type="text">
+          <input ng-model="venuectrl.newVenue.servesAlcohol" type="boolean">
+          <button type="submit">Add New Venue</button>
+        </form>
+      </div>
+    </main>
+    <script src="bundle.js"></script>
+</body>
+
+</html>
