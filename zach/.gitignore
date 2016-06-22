@@ -1,0 +1,4 @@
+build/
+node_modules/
+karma.conf.js
+test/*_bundle.js
