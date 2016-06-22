@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Two Res API Angular</title>
+  </head>
+  <body ng-app="twoCRUDApp">
+    <div ng-controller="FrenchieController as frenchiectrl" ng-init="frenchiectrl.getFrenchies()">
+      <h1> Frenchies </h1>
+      <ul>
+        <li ng-repeat="frenchie in frenchiectrl.frenchies">
+          NAME: {{frenchie.name}} and DOGWALKERS BITTEN: {{frenchie.dogWalkers_bitten}}
+          <button ng-click="frenchie.editing = !frenchie.editing">EDIT</button>
+          <form ng-hide="!frenchie.editing" ng-submit="frenchiectrl.updateFrenchie(frenchie, updatedFrenchie)">
+          <label> NAME:
+            <input type="text" ng-model="updatedFrenchie.name"/>
+          </label>
+          <label> BITTEN:
+            <input type="text" ng-model="updatedFrenchie.dogWalkers_bitten"/>
+          </label>
+            <button type="submit">UPDATE </button>
+            <button ng-click="frenchiectrl.deleteFrenchies(frenchie)">DELETE</button>
+          </form>
+        </li>
+      </ul>
+      <form ng-submit="frenchiectrl.addFrenchies()">
+        <label for "name"> NAME:
+          <input type="text" ng-model="frenchiectrl.newFrenchie.name"/>
+        </label><br>
+        <label for "bitten"> DOGWALKERS BITTEN:
+        <input type="text" ng-model="frenchiectrl.newFrenchie.dogWalkers_bitten"/>
+      </label><br>
+        <button type="submit">ADD FRENCHIE </button>
+      </form>
+    </div>
+    <div ng-controller="DogwalkerController as dogwalkerctrl" ng-init="dogwalkerctrl.getDW()">
+      <h1> Dogwalkers </h1>
+      <ul>
+        <li ng-repeat="dogwalker in dogwalkerctrl.dogwalkers">
+          NAME: {{dogwalker.name}} and DOGS DIED: {{dogwalker.dogs_died}}
+          <button ng-click="dogwalker.editing = !dogwalker.editing">EDIT</button>
+          <form ng-hide="!dogwalker.editing" ng-submit="dogwalkerctrl.updateDW(dogwalker, updatedDogwalker)">
+            <label> NAME:
+            <input type="text" ng-model="updatedDogwalker.name"/>
+          </label>
+          <label> DOGS DIED:
+            <input text="text" ng-model="updatedDogwalker.dogs_died"/>
+          </label>
+            <button type="submit">UPDATE</button>
+            <button ng-click="dogwalkerctrl.deleteDW(dogwalker)">DELETE</button>
+          </form>
+        </li>
+      </ul>
+      <form ng-submit="dogwalkerctrl.addDW()">
+        <label for "name">NAME:
+          <input type="text" ng-model="dogwalkerctrl.newDW.name"/>
+        </label><br>
+        <label for "dogs died">DOGS DIED:
+          <input type="text" ng-model="dogwalkerctrl.newDW.dogs_died"/>
+        </label><br>
+        <button type="submit">ADD DOGWALKER </button>
+      </form>
+      <button ng-controller="mixedController as deathctrl" ng-click="deathctrl.death()">WHO IS MORE VICIOUS? </button>
+    <script src="./bundle.js"></script>
+  </body>
+</html>
