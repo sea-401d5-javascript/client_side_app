@@ -1,26 +1,25 @@
 'use strict';
-const angular = require('angular');
 
-const app = angular.module('NotesApp', []);
+module.exports = function(app) {
 
 app.controller('NbaController', ['$http', NbaController]);
 
 function NbaController($http) {
   this.$http = $http;
-  this.players = [{body: 'test player'}];
+  this.players = [];
 }
 
 NbaController.prototype.getPlayer = function() {
-  this.$http.get('http:localhost/3000/')
+  this.$http.get('http://localhost:3000/nbaPlayers')
     .then((res) => {
-      this.players = res.data.data;
+      this.players = res.data;
     }, (err) => {
       console.log(err)
   });
 }
 
 NbaController.prototype.addPlayer = function() {
-  this.$http.post('http://localhost:3000/', this.newPlayer)
+  this.$http.post('http://localhost:3000/nbaPlayers', this.newPlayer)
     .then((res) => {
       this.players.push(res.data);
       this.newPlayer = null;
@@ -29,11 +28,10 @@ NbaController.prototype.addPlayer = function() {
     });
 };
 
-NbaController.prototype.deletePlayer = function(note) {
-  this.$http.delete('http://localhost:3000/' + player._id)
+NbaController.prototype.deletePlayer = function(player) {
+  this.$http.delete('http://localhost:3000/nbaPlayers' + this.players._id)
     .then(() => {
-      let index = this.players.indexOf(note);
-      this.notes.splice(index, 1);
+      this.players.splice(this.players.indexOf(player), 1);
     }, (err) => {
       console.log(err);
     });
@@ -42,4 +40,5 @@ NbaController.prototype.deletePlayer = function(note) {
 NbaController.prototype.updatePlayer = function(player, updatedPlayer) {
   let arrayPlayer = this.players[this.players.indexOf(player)];
   arrayPlayer.body = updatedPlayer;
+};
 };
