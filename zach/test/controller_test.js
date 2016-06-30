@@ -29,16 +29,25 @@ describe('controller tests', () => {
   });
 
   it('should be able to post a performance', () => {
-    perfctrl.newPerformance = {name: 'testPerf', venue: 'annex'};
+    perfctrl.newPerformance = {name: 'testPerf', venue: 'annex', venueObject: []};
+    let responseObject = perfctrl.newPerformance;
+    responseObject.venueObject.push({name: 'annex', neighborhood: 'capitol hill'});
     $httpBackend.expectPOST('http://localhost:3000/performances')
-      .respond(200, perfctrl.newPerformance);
-
+      .respond(200, responseObject);
     perfctrl.addPerformance();
     $httpBackend.flush();
     expect(perfctrl.performances[1].venue).toBe('annex');
   });
   it('should be able to update a performance', () => {
+    let testPerformance = {name: 'testPerformance', venue: 'annex', _id: 1};
+    let updatedPerformance = {name: 'testPerf', venue: 'Annex Theatre', _id: 1};
+    $httpBackend.expectPUT('http://localhost:3000/performances/')
+      .respond(200, {message: 'testPerf successfully updated'});
 
+    perfctrl.performances.push(testPerformance);
+    perfctrl.updatePerformance(testPerformance, updatedPerformance);
+    $httpBackend.flush();
+    expect(perfctrl.performances[1].name).toBe('testPerf');
   });
   it('should get a list of venues', () => {
     $httpBackend.expectGET('http://localhost:3000/venues')

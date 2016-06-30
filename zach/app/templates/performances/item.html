@@ -1,0 +1,20 @@
+<li>
+  <h2>{{performance.name}}</h2>
+  <p>
+    {{performance.startDate}} to {{performance.endDate}}
+  </p>
+  <button ng-click="performance.showVenue = !performance.showVenue">{{performance.venue}}</button>
+  <ul ng-hide="!performance.showVenue">
+    <li>Neighborhood: {{performance.venueObject[0].neighborhood}}</li>
+    <li>Serves Alcohol: {{performance.venueObject[0].servesAlcohol}}</li>
+  </ul>
+    <button ng-click="performance.editing = !performance.editing">EDIT</button>
+    <button ng-hide="!performance.editing" ng-click="deletePerformance(performance)">Delete</button>
+    <form ng-hide="!performance.editing" ng-submit="updatePerformance(performance, updatedPerformance)">
+      <input type="text" ng-model="updatedPerformance.name"/>
+      <input type="text" ng-model="updatedPerformance.venue"/>
+      <input type="date" ng-model="updatedPerformance.startDate"/>
+      <input type="date" ng-model="updatedPerformance.endDate"/>
+      <button type="submit">Update Performance</button>
+    </form>
+</li>

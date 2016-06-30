@@ -19,6 +19,12 @@ gulp.task('webpack:test', function() {
     .pipe(webpack({
       output: {
         filename: 'test_bundle.js'
+      },
+      module: {
+        loaders: [{
+          test: /\.html$/,
+          loader: 'html'
+        }]
       }
     }))
     .pipe(gulp.dest('test'));

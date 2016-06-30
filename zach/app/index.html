@@ -14,8 +14,7 @@
     <main>
       <div data-ng-controller="PerformanceController as perfctrl" ng-cloak data-ng-init="perfctrl.getPerformances()">
         <h1>Performances:</h1>
-        <ul>
-          <li ng-repeat="performance in perfctrl.performances">
+          <!-- <li ng-repeat="performance in perfctrl.performances">
             <h2>{{performance.name}}</h2>
             <p>
               {{performance.startDate}} to {{performance.endDate}}
@@ -42,11 +41,15 @@
           <input ng-model="perfctrl.newPerformance.startDate" type="date">
           <input ng-model="perfctrl.newPerformance.endDate" type="date">
           <button type="submit">Add New Performance</button>
-        </form>
+        </form> -->
+        <list-directive performances="perfctrl.performances"></list-directive>
+        <newform-directive new-performance="perfctrl.newPerformance"></newform-directive>
       </div>
       <div data-ng-controller="VenueController as venuectrl" data-ng-init="venuectrl.getVenues()">
         <h1>Venues</h1>
-        <ul>
+        <venue-list-directive venues="venuectrl.venues"></venue-list-directive>
+        <venue-newform-directive new-venue="venuectrl.newVenue"></venue-newform-directive>
+        <!-- <ul>
           <li ng-repeat="venue in venuectrl.venues">
             <h2>{{venue.name}}</h2>
               <p>{{venue.neighborhood}}</p>
@@ -60,13 +63,13 @@
                   <button type="submit">Update Venue</button>
                 </form>
           </li>
-        </ul>
-        <form ng-submit="venuectrl.addVenue()">
+        </ul> -->
+        <!-- <form ng-submit="venuectrl.addVenue()">
           <input ng-model="venuectrl.newVenue.name" type="text">
           <input ng-model="venuectrl.newVenue.neighborhood" type="text">
           <input ng-model="venuectrl.newVenue.servesAlcohol" type="boolean">
           <button type="submit">Add New Venue</button>
-        </form>
+        </form> -->
       </div>
     </main>
     <script src="bundle.js"></script>
