@@ -29,7 +29,7 @@ function VenueController($http) {
         console.log(err);
       });
   }.bind(this);
-  VenueController.prototype.addVenue = function() {
+  this.addVenue = function() {
     this.$http.post('http://localhost:3000/venues/', this.newVenue)
       .then(()=> {
         this.venues.push(this.newVenue);

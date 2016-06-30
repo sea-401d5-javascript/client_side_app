@@ -11,9 +11,7 @@ function PerformanceController($http) {
   this.addPerformance = function() {
     this.$http.post('http://localhost:3000/performances', this.newPerformance)
       .then((res) => {
-        console.log('RESPONSE', res.data);
         this.newPerformance.venueObject = [];
-        console.log('DATA OBJECT', res.data.venueObject[0]);
         this.newPerformance.venueObject.push(res.data.venueObject[0]);
         this.performances.push(this.newPerformance);
         this.newPerformance = null;
@@ -21,7 +19,7 @@ function PerformanceController($http) {
         console.log(err);
       });
   }.bind(this);
-  PerformanceController.prototype.deletePerformance = function(performance) {
+  this.deletePerformance = function(performance) {
     this.$http.delete('http://localhost:3000/performances/' + performance.name)
       .then(() => {
         let index = this.performances.indexOf(performance);
@@ -30,7 +28,7 @@ function PerformanceController($http) {
         console.log(err);
       });
   }.bind(this);
-  PerformanceController.prototype.updatePerformance = function(performance, updatedPerformance) {
+  this.updatePerformance = function(performance, updatedPerformance) {
     performance.name = updatedPerformance.name;
     performance.venue = updatedPerformance.venue;
     performance.startDate = updatedPerformance.startDate;
@@ -93,8 +91,4 @@ PerformanceController.prototype.updatePerformance = function(performance, update
     }, (err) => {
       console.log(err);
     });
-};
-
-PerformanceController.prototype.testFunction = function() {
-  console.log('HELLO THERE');
 };
