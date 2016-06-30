@@ -19,10 +19,10 @@ var paths = {
 };
 
 gulp.task('watch', function () {
-  gulp.watch(paths.dev.html, ['statichtmlfiles:dev']);
-  gulp.watch(paths.dev.js, ['bundle']);
-  gulp.watch(paths.dev.css, ['staticcssfiles:dev']);
-  gulp.watch(paths.dev.test, ['bundle:test']);
+  gulp.watch(paths.copy.html, ['copy']);
+  gulp.watch(paths.copy.js, ['bundle']);
+  gulp.watch(paths.copy.css, ['staticcssfiles:dev']);
+  gulp.watch(paths.copy.test, ['bundle:test']);
 });
 
 gulp.task('copy', () => {
@@ -55,5 +55,7 @@ gulp.task('lint' , () => {
     .pipe(lint())
     .pipe(lint.format());
 });
+
+gulp.task('build', ['bundle', 'copy']);
 
 gulp.task('default', ['bundle', 'copy']);
