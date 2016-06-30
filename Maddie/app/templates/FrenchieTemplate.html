@@ -1,10 +1,10 @@
-<form ng-submit="submitFrenchie(frenchie)">
+<form ng-submit="submit(animal)">
   <label>Name:
-  <input type="text" ng-model="frenchie.name"/>
+  <input type="text" ng-model="animal.name"/>
 </label>
 <label>DogWalkers Bitten:
-  <input type="text" ng-model="frenchie.dogWalkers_bitten"/>
+  <input type="text" ng-model="animal.dogWalkers_bitten"/>
 </label>
-  <button ng-show="type === 'edit frenchie'" ng-click="deleteFrenchies(frenchie)">Delete</button>
+  <button ng-show="type === 'edit'" ng-click="delete(animal)">Delete</button>
   <button type="submit">{{type}}</button>
 </form>

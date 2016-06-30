@@ -5,13 +5,22 @@ module.exports = function(app){
       templateUrl:'./templates/FrenchieTemplate.html',
       scope:{
         type:'@',
-        frenchie: '=' //resource for config
-        //attribute for animal---dogwalker vs frenchie
+        resource: '@',//resource for config
+        animal:'='//attribute for animal---dogwalker vs frenchie
       },
       require: '^^ngController',
       link: function($scope, elem, attr, controller) {
-        $scope.deleteFrenchies = controller.deleteFrenchies;
-        $scope.submitFrenchie = $scope.type === 'new frenchie' ? controller.addFrenchies : controller.updateFrenchies;
+        let configMethods = {
+          frenchies: function($scope) {
+            $scope.delete = controller.deleteFrenchies;
+            $scope.submit = $scope.type === 'new' ? controller.addFrenchies : controller.updateFrenchies;
+          },
+          dogwalkers: function($scope) {
+            $scope.delete = controller.deleteDW;
+            $scope.submit= $scope.type === 'new' ? controller.addDW : controller.updateDW;
+          }
+        };
+        configMethods[$scope.resource]($scope);
       }
     };
   });
