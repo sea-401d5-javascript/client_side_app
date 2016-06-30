@@ -8,16 +8,12 @@
     <div ng-controller="FrenchieController as frenchiectrl" ng-init="frenchiectrl.getFrenchies()">
       <h1> Frenchies </h1>
       <ul>
-        <li ng-repeat="frenchie in frenchiectrl.frenchies">
-          NAME: {{frenchie.name}} and DOGWALKERS BITTEN: {{frenchie.dogWalkers_bitten}}
-        <frenchie-directive animal="frenchie" type="edit" resource="frenchies"></frenchie-directive>
-        </li>
-      </ul>
-    <frenchie-directive animal="{}" type="new" resource="frenchies"></frenchie-directive>
+      <li ng-repeat="frenchie in frenchiectrl.frenchies">
+      <list-directive animal="frenchie" type="frenchies"></list-directive>
+    </li>
+  </ul>
+    <form-directive animal="{}" type="new" resource="frenchies"></form-directive>
     </div>
-
-
-
 
     <div ng-controller="DogwalkerController as dogwalkerctrl" ng-init="dogwalkerctrl.getDW()">
       <h1> Dogwalkers </h1>
@@ -25,10 +21,10 @@
         <li ng-repeat="dogwalker in dogwalkerctrl.dogwalkers">
           NAME: {{dogwalker.name}} and DOGS DIED: {{dogwalker.dogs_died}}
 
-        <frenchie-directive animal="dogwalker" type="edit" resource="dogwalkers"></frenchie-directive>
+        <form-directive animal="dogwalker" type="edit" resource="dogwalkers"></form-directive>
         </li>
       </ul>
-      <frenchie-directive animal="{}" type="new" resource="dogwalkers"></frenchie-directive>
+      <form-directive animal="{}" type="new" resource="dogwalkers"></form-directive>
     <script src="./bundle.js"></script>
   </body>
 </html>

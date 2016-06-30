@@ -1,8 +1,8 @@
 'use strict';
 module.exports = function(app){
-  app.directive('frenchieDirective', function() {
+  app.directive('formDirective', function() {
     return {
-      templateUrl:'./templates/FrenchieTemplate.html',
+      templateUrl:'./templates/formTemplate.html',
       scope:{
         type:'@',
         resource: '@',//resource for config
