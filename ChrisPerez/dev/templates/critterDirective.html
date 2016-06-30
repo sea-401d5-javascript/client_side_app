@@ -1,0 +1,10 @@
+<div>
+  <h2>{{name}}</h2>
+  <h3>{{power}}</h3>
+  <form  ng-hide="!snake.editing" ng-submit="snakesctrl.updateSnake(snake, update)">
+    <input type="number" ng-model="update.size" placeholder="Update me"/>
+    <button type="submit">Update Snake</button>
+  </form>
+  <button ng-click="snake.editing=!snake.editing">Edit</button>
+  <button ng-click="snakesctrl.deleteSnake(snake)">X</button>
+</div>
