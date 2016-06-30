@@ -7,7 +7,7 @@ const mocha = require('gulp-mocha');
 const webpack = require('webpack-stream');
 
 gulp.task('copy', ()=> {
-  return gulp.src('./app/**/**/*')
+  return gulp.src('./app/**/*.html')
     .pipe(gulp.dest('build/'));
 });
 
