@@ -3,7 +3,7 @@ module.exports = function(app) {
 };
 
 
-function TreatsController($http) {
+function TreatsController($http, ErrorService) {
   this.$http = $http;
   this.cookieUrl = 'http://localhost:3000/cookies';
   this.candyUrl = 'http://localhost:3000/candy';
