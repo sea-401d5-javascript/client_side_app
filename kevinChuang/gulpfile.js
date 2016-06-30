@@ -24,7 +24,7 @@ gulp.task('bundle', ()=> {
 gulp.task('build',['copy','bundle']);
 
 
-gulp.task('default',['lint','Mochai','watch'], () => {});
+gulp.task('default',['build'], () => {});
 
 gulp.task('lint', () => {
   gulp.src([

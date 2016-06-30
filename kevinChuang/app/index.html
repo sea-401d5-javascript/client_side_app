@@ -58,6 +58,12 @@
           <button type="submit">Submit</button>
         </form>
     </main>
+
+    <div ng-controller="ErrorController as errorctrl">
+      <ul>
+        <li ng-repeat="error errorctrl.errors">{{error}}</li>
+      </ul>
+    </div>
     <script src="./bundle.js" charset="utf-8"></script>
   </body>
 </html>
