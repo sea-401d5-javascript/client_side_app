@@ -1,5 +1,0 @@
-node_modules
-.DS_Store
-build
-db
-test/test_bundle.js
