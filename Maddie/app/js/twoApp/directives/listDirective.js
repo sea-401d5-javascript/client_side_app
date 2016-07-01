@@ -8,8 +8,7 @@ module.exports = function(app) {
       },
       require:'^^ngController',
       link: function($scope, elem, attr, controller) {
-        $scope.name = $scope.type === 'frenchies' ? $scope.animal.name : $scope.animal.name;
-        $scope.death = $scope.type === 'frenchies' ? $scope.animal.dogWalkers_bitten : $scope.animal.dog_died;
+        $scope.death = $scope.type === 'frenchies' ? 'dogWalkers_bitten' : 'dogs_died';
       }
     };
   });

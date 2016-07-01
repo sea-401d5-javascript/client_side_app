@@ -4,7 +4,7 @@ module.exports = function(app){
     return {
       templateUrl:'./templates/formTemplate.html',
       scope:{
-        type:'@',
+        form:'@',
         resource: '@',//resource for config
         animal:'='//attribute for animal---dogwalker vs frenchie
       },
@@ -13,11 +13,11 @@ module.exports = function(app){
         let configMethods = {
           frenchies: function($scope) {
             $scope.delete = controller.deleteFrenchies;
-            $scope.submit = $scope.type === 'new' ? controller.addFrenchies : controller.updateFrenchies;
+            $scope.submit = $scope.form === 'new' ? controller.addFrenchies : controller.updateFrenchies;
           },
           dogwalkers: function($scope) {
             $scope.delete = controller.deleteDW;
-            $scope.submit= $scope.type === 'new' ? controller.addDW : controller.updateDW;
+            $scope.submit= $scope.form === 'new' ? controller.addDW : controller.updateDW;
           }
         };
         configMethods[$scope.resource]($scope);

@@ -1,4 +1,4 @@
-<h3 ng-show="type === 'new'">ADD NEW </h1>
+<h3 ng-show="form === 'new'">ADD NEW </h1>
 <form ng-submit="submit(animal)">
   <label>Name:
   <input type="text" ng-model="animal.name"/>
@@ -9,6 +9,6 @@
 <label ng-show="resource === 'dogwalkers'">Dogs Died:
   <input type="text" ng-model="animal.dogs_died"/>
 </label>
-  <button ng-show="type === 'edit'" ng-click="delete(animal)">Delete</button>
-  <button type="submit">{{type}}</button>
+  <button ng-show="form === 'edit'" ng-click="delete(animal)">Delete</button>
+  <button type="submit">{{form}}</button>
 </form>

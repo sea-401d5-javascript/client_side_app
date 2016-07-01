@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>Two Res API Angular</title>
-  </head>
-  <body ng-app="twoCRUDApp">
+</head>
+
+<body ng-app="twoCRUDApp">
     <div ng-controller="FrenchieController as frenchiectrl" ng-init="frenchiectrl.getFrenchies()">
-      <h1> Frenchies </h1>
-      <ul>
-      <li ng-repeat="frenchie in frenchiectrl.frenchies">
-      <list-directive animal="frenchie" type="frenchies"></list-directive>
-    </li>
-  </ul>
-    <form-directive animal="{}" type="new" resource="frenchies"></form-directive>
+        <h1> Frenchies </h1>
+        <ul>
+            <list-directive animal="frenchie" type="frenchies" ng-repeat="frenchie in frenchiectrl.frenchies"></list-directive>
+        </ul>
+        <form-directive animal="{}" form="new" resource="frenchies"></form-directive>
     </div>
-
     <div ng-controller="DogwalkerController as dogwalkerctrl" ng-init="dogwalkerctrl.getDW()">
-      <h1> Dogwalkers </h1>
-      <ul>
-        <li ng-repeat="dogwalker in dogwalkerctrl.dogwalkers">
-          NAME: {{dogwalker.name}} and DOGS DIED: {{dogwalker.dogs_died}}
+        <h1> Dogwalkers </h1>
+        <ul>
+            <list-directive animal="dogwalker" type="dogwalkers" ng-repeat="dogwalker in dogwalkerctrl.dogwalkers"></list-directive>
+        </ul>
+        <form-directive animal="{}" form="new" resource="dogwalkers"></form-directive>
+        <script src="./bundle.js"></script>
+</body>
 
-        <form-directive animal="dogwalker" type="edit" resource="dogwalkers"></form-directive>
-        </li>
-      </ul>
-      <form-directive animal="{}" type="new" resource="dogwalkers"></form-directive>
-    <script src="./bundle.js"></script>
-  </body>
 </html>

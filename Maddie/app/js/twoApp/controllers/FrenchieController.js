@@ -38,12 +38,11 @@ function FrenchieController($http) {
   this.updateFrenchies = function(frenchie) {
     this.$http.put('http://localhost:3000/frenchie', frenchie)
     .then(() => {
-      console.log('before', this.frenchies);
       this.frenchies = this.frenchies.map(nf => {
         //console.log(nf._id === frenchie._id);
         return nf._id === frenchie._id ? frenchie : nf;
       });
-      console.log('after', this.frenchies);
+      //console.log('after', this.frenchies);
     }, (err) => {
       console.log(err);
     });

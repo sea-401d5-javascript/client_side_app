@@ -1,12 +1,8 @@
-<!--<li ng-repeat="frenchie in frenchies">
-  NAME: {{frenchie.name}}<br>
-  DOGWALKERS BITTEN: {{frenchie.dogWalkers_bitten}}<br>
-  <form-directive animal="frenchie" resource="frenchies" type="edit"></form-directive>
-</li>-->
+<li>
+  NAME: {{animal.name}}
+  <p ng-show="type === 'frenchies'"> DOGWALKERS BITTEN: {{animal[death]}}</p>
+   <p ng-show="type === 'dogwalkers'">DOGS DIED: {{animal[death]}}</p>
 
-
-  NAME: {{name}}<br>
-  DOGWALKERS BITTEN: {{death}}<br>
-
-  <form-directive animal="animal" resource="frenchies" type="edit"></form-directive>
-  <!--<form-directive ng-show="type === 'dogwalkers'" animal="dogwalker" resource="dogwalkers" type="edit"></form-directive>-->
+  <form-directive ng-show="type === 'frenchies'" animal="animal" resource="frenchies" form="edit"></form-directive><br>
+  <form-directive ng-show="type === 'dogwalkers'" animal="animal" resource="dogwalkers" form="edit"></form-directive><br>
+</li>
