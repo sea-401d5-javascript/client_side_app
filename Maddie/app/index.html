@@ -8,17 +8,19 @@
 
 <body ng-app="twoCRUDApp">
     <div ng-controller="FrenchieController as frenchiectrl" ng-init="frenchiectrl.getFrenchies()">
-        <h1> Frenchies </h1>
+      <list-directive type="Frenchies" animals="frenchiectrl.frenchies"></list-directive>
+        <!-- <h1> Frenchies </h1>
         <ul>
-            <list-directive animal="frenchie" type="frenchies" ng-repeat="frenchie in frenchiectrl.frenchies"></list-directive>
-        </ul>
+            <item-directive animal="frenchie" type="frenchies" ng-repeat="frenchie in frenchiectrl.frenchies"></item-directive>
+        </ul> -->
         <form-directive animal="{}" form="new" resource="frenchies"></form-directive>
     </div>
     <div ng-controller="DogwalkerController as dogwalkerctrl" ng-init="dogwalkerctrl.getDW()">
-        <h1> Dogwalkers </h1>
+      <list-directive type="Dogwalkers" animals="dogwalkerctrl.dogwalkers"></list-directive>
+        <!-- <h1> Dogwalkers </h1>
         <ul>
-            <list-directive animal="dogwalker" type="dogwalkers" ng-repeat="dogwalker in dogwalkerctrl.dogwalkers"></list-directive>
-        </ul>
+            <item-directive animal="dogwalker" type="dogwalkers" ng-repeat="dogwalker in dogwalkerctrl.dogwalkers"></item-directive>
+        </ul> -->
         <form-directive animal="{}" form="new" resource="dogwalkers"></form-directive>
         <script src="./bundle.js"></script>
 </body>
