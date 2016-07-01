@@ -4,49 +4,44 @@ module.exports = function(app){
 
 function SnakesController($http){
   this.$http = $http;
-  this.snakes = []; // { "_id" : ObjectId("5768307acb689269b859775d"), "name" : "Dusty on Rails", "size" : 3, "weaselKiller" : true, "__v" : 0 }
+  this.critters = []; // { "_id" : ObjectId("5768307acb689269b859775d"), "name" : "Dusty on Rails", "size" : 3, "weaselKiller" : true, "__v" : 0 }
   this.url = 'http://localhost:2222/snakes/';
-}
-
-SnakesController.prototype.getSnakes = function(){
-  this.$http.get(this.url)
+  this.getCritters = function(){
+    $http.get(this.url)
     .then((res)=>{
-      this.snakes = res.data;
+      this.critters = res.data;
     }, (err)=>{
       console.log(err);
     });
-};
+  };
 
-SnakesController.prototype.addSnake = function(){
-  this.$http.post(this.url, this.snake)
+  this.addCritter = function(critter){
+    $http.post(this.url, critter)
     .then((res)=>{
-      this.snakes.push(res.data);
-      this.snake = null;
+      this.critters.push(res.data);
     }, (err)=>{
       console.log(err);
     });
-};
+  }.bind(this);
 
-SnakesController.prototype.deleteSnake = function(snake){
-  this.$http.delete(this.url + snake._id)
+  this.deleteCritter = function(critter){
+    $http.delete(this.url + critter._id)
     .then(()=>{
-      this.snakes.splice(this.snakes.indexOf(snake), 1);
+      this.critters.splice(this.critters.indexOf(critter), 1);
     }, (err)=>{
       console.log(err);
     });
-};
+  }.bind(this);
 
-SnakesController.prototype.updateSnake = function(snake, updated){
+  this.updateCritter = function(critter){
 
-  snake.size = updated.size;
-
-  this.$http.put(this.url, snake)
+    $http.put(this.url, critter)
     .then(()=>{
-      this.snakes = this.snakes.map((s)=>{
-        return s._id === snake._id ? snake : s;
+      this.critters = this.critters.map((c)=>{
+        return c._id === critter._id ? critter : c;
       });
     }, (err)=>{
       console.log(err);
     });
-
-}; //gonna want to add .bind(this) to all the prototype functions
+  }.bind(this);
+}

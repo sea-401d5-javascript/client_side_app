@@ -4,7 +4,7 @@ const clean = require('gulp-clean');
 
 const paths = {
   js: __dirname + '/dev/**/*.js',
-  html: __dirname + '/dev/index.html',
+  html: __dirname + '/dev/**/*.html',
   css: __dirname + '/dev/style.css'
 };
 

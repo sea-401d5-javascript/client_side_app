@@ -1,0 +1,7 @@
+<form ng-submit="submit(critter)">
+  <input type="text" ng-model="critter.name" placeholder="Name" />
+  <input ng-if="team === 'weasels'" type="text" ng-model="critter.strength" placeholder="Strength" />
+  <input ng-if="team === 'snakes'" type="text" ng-model="critter.size" placeholder="Size" />
+  <button type="submit" ng-click="updateCritter(critter)">{{type}} critter</button>
+  <button ng-show="type ==='edit'" ng-click="deleteCritter(critter)">X</button>
+</form>

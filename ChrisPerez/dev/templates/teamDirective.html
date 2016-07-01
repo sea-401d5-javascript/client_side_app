@@ -1,7 +1,10 @@
 <div>
   <ul>
-    <li ng-repeat="critter in snakes || critter in weasels">
-      <critter-directive critter="critter" name="critter.name" power="critter.size || critter.strength"></critter-directive>
+    <li ng-repeat="critter in critters">
+      <h2>Name: {{critter.name}}</h2>
+      <h3>Power: {{critter.strength || critter.size}}</h3>
+      <change-directive critter="critter" type="edit" team="team"><change-directive>
     </li>
   </ul>
+  <change-directive critter="{}" type="new" team="team"><change-directive>
 </div>

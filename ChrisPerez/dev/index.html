@@ -6,7 +6,20 @@
 </head>
 <body ng-app="SvW-App">
 
-  <main ng-controller="SnakesController as snakesctrl" ng-init="snakesctrl.getSnakes()">
+  <main ng-controller="SnakesController as sctrl" ng-init="sctrl.getCritters()">
+    <h1>Snakes</h1>
+    <team-directive critters="sctrl.critters" team="snakes"></team-directive>
+  </main>
+
+
+
+
+  <main ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
+    <h1>Weasels</h1>
+    <team-directive critters="wctrl.critters" team="weasels"></team-directive>
+  </main>
+
+  <!-- <main ng-controller="SnakesController as snakesctrl" ng-init="snakesctrl.getSnakes()">
     <h1>Snakes</h1>
     <ul>
       <li ng-repeat="snake in snakesctrl.snakes">{{snake.name}}, {{snake.size}}
@@ -42,7 +55,7 @@
       <input ng-model="weaselsctrl.weasel.strength" type="number" placeholder="Power level"/>
       <button type="submit">New Weasel</button>
     </form>
-  </main>
+  </main> -->
 
   <script src="./bundle.js"></script>
 </body>

@@ -7,47 +7,42 @@ function WeaselsController($http){
   this.$http = $http;
   this.weasels = []; //{ "_id" : ObjectId("57683082cb689269b859775e"), "name" : "Business Drew", "strength" : 3, "snakeKiller" : true, "__v" : 0 }
   this.url = 'http://localhost:2222/weasels/';
-}
-
-WeaselsController.prototype.getWeasels = function(){
-  this.$http.get(this.url)
+  this.getCritters = function(){
+    $http.get(this.url)
     .then((res)=>{
-      this.weasels = res.data;
+      this.critters = res.data;
     }, (err)=>{
       console.log(err);
     });
-};
+  };
 
-WeaselsController.prototype.addWeasel = function(){
-  this.$http.post(this.url, this.weasel)
+  this.addCritter = function(critter){
+    $http.post(this.url, critter)
     .then((res)=>{
-      this.weasels.push(res.data);
-      this.weasel = null;
+      this.critters.push(res.data);
     }, (err)=>{
       console.log(err);
     });
-};
-
-WeaselsController.prototype.deleteWeasel = function(weasel){
-  this.$http.delete(this.url + weasel._id)
+  }.bind(this);
+  
+  this.deleteCritter = function(critter){
+    $http.delete(this.url + critter._id)
     .then(()=>{
-      this.weasels.splice(this.weasels.indexOf(weasel), 1);
+      this.critters.splice(this.critters.indexOf(critter), 1);
     }, (err)=>{
       console.log(err);
     });
-};
+  }.bind(this);
 
-WeaselsController.prototype.updateWeasel = function(weasel, updated){
+  this.updateCritter = function(critter){
 
-  weasel.strength = updated.strength;
-
-  this.$http.put(this.url, weasel)
+    $http.put(this.url, critter)
     .then(()=>{
-      this.weasels = this.weasels.map((w)=>{
-        return w._id === weasel._id ? weasel : w;
+      this.critters = this.critters.map((c)=>{
+        return c._id === critter._id ? critter : c;
       });
     }, (err)=>{
       console.log(err);
     });
-
-};  //gonna want to move the prototype into the controller function itself
+  }.bind(this);
+}
