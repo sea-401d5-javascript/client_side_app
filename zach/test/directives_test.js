@@ -4,19 +4,12 @@ require('angular-mocks');
 require('../app/js/client');
 
 const perfItemTemplate = require('../app/templates/performances/item.html');
-const perfListTemplate = require('../app/templates/performances/list.html');
-const perfFormTemplate = require('../app/templates/performances/new_form.html');
 const venItemTemplate = require('../app/templates/venues/item.html');
-const venListTemplate = require('../app/templates/venues/list.html');
-const venFormTemplate = require('../app/templates/venues/new_form.html');
 
 describe('directive tests', () => {
   let $httpBackend;
   let $scope;
   let $compile;
-  let perfctrl = {
-    performances: [{name: 'test performance', venue: 'test venue'}]
-  };
 
   beforeEach(() => {
     angular.mock.module('PerformanceApp');
@@ -56,4 +49,4 @@ describe('directive tests', () => {
     let text = h2.text();
     expect(text).toBe('test venue');
   });
-})
+});
