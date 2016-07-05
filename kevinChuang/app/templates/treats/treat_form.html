@@ -1,0 +1,10 @@
+<form ng-cloak ng-submit="submit(treat)">
+  <label>Name:
+    <input type="text" ng-model="treat.name" required>
+  </label>
+  <label>Stock:
+    <input type="text" ng-model="treat.stock" required>
+  </label>
+  <button type="submit" ng-click="update(treat)">{{formtype}}</button>
+  <button ng-show="formtype==='edit'" ng-click="delete(treat)">delete</button>
+</form>

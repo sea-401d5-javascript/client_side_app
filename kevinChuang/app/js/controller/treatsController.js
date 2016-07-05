@@ -30,31 +30,35 @@ TreatsController.prototype.getCandy = function() {
     });
 };
 
+TreatsController.prototype.getTreats = function() {
+  this.getCookies();
+  this.getCandy();
+};
+
 // POST routes-----------------------------------
 TreatsController.prototype.addCookie = function() {
-  this.$http.post(this.cookieUrl, this.newCookie)
+  this.$http.post(this.cookieUrl, this.cookie)
     .then((res)=> {
       this.cookieArray.push(res.data);
-      this.newCookie = null;
+      this.cookie = null;
     }, (err) => {
       console.log(err);
     });
 };
 
 TreatsController.prototype.addCandy = function() {
-  this.$http.post(this.candyUrl, this.newCandy)
+  this.$http.post(this.candyUrl, this.candy)
     .then((res)=> {
+      console.log(res.data);
       this.candyArray.push(res.data);
-      this.newCandy = null;
+      this.candy = null;
     }, (err) => {
       console.log(err);
     });
-};
+}.bind(this);
 
 // PUT routes------------------------------------
-TreatsController.prototype.updateCookie = function(cookie, updateCookie) {
-  cookie.name = updateCookie.name;
-  cookie.stock = updateCookie.stock;
+TreatsController.prototype.updateCookie = function(cookie) {
   this.$http.put(this.cookieUrl, cookie)
     .then(()=> {
       this.cookieArray = this.cookieArray.map(co => {
@@ -65,9 +69,7 @@ TreatsController.prototype.updateCookie = function(cookie, updateCookie) {
     });
 };
 
-TreatsController.prototype.updateCandy = function(candy, updateCandy) {
-  candy.name = updateCandy.name;
-  candy.stock = updateCandy.stock;
+TreatsController.prototype.updateCandy = function(candy) {
   this.$http.put(this.candyUrl, candy)
     .then(()=> {
       this.candyArray = this.candyArray.map(ca => {
@@ -76,7 +78,7 @@ TreatsController.prototype.updateCandy = function(candy, updateCandy) {
     }, (err) => {
       console.log(err);
     });
-};
+}.bind(this);
 // DELETE routes---------------------------------
 
 TreatsController.prototype.deleteCookie = function(cookie) {
@@ -95,4 +97,4 @@ TreatsController.prototype.deleteCandy = function(candy) {
     },(err)=> {
       console.log(err);
     });
-};
+}.bind(this);
