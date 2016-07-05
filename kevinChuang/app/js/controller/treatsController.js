@@ -3,22 +3,25 @@ module.exports = function(app) {
 };
 
 
-function TreatsController($http, ErrorService) {
+function TreatsController($http, ErrorService, TreatService) {
   this.$http = $http;
   this.cookieUrl = 'http://localhost:3000/cookies';
   this.candyUrl = 'http://localhost:3000/candy';
   this.cookieArray = [];
   this.candyArray = [];
+  this.getTreats = TreatService.getTreats;
+  this.addTreat = TreatService.addTreat;
 }
 // GET routes------------------------------------
 
 TreatsController.prototype.getCookies = function() {
-  this.$http.get('http://localhost:3000/cookies')
+  this.$http.get(this.cookieUrl)
     .then((res) => {
       this.cookieArray = res.data;
     }, (err) => {
       console.log(err);
     });
+  // this.getTreats(this.cookieUrl, this.cookieArray);
 };
 
 TreatsController.prototype.getCandy = function() {
@@ -37,24 +40,11 @@ TreatsController.prototype.getTreats = function() {
 
 // POST routes-----------------------------------
 TreatsController.prototype.addCookie = function() {
-  this.$http.post(this.cookieUrl, this.cookie)
-    .then((res)=> {
-      this.cookieArray.push(res.data);
-      this.cookie = null;
-    }, (err) => {
-      console.log(err);
-    });
+  this.addTreat(this.cookieUrl, this.cookie,this.cookieArray);
 };
 
 TreatsController.prototype.addCandy = function() {
-  this.$http.post(this.candyUrl, this.candy)
-    .then((res)=> {
-      console.log(res.data);
-      this.candyArray.push(res.data);
-      this.candy = null;
-    }, (err) => {
-      console.log(err);
-    });
+  this.addTreat(this.candyUrl, this.candy, this.candyArray)
 }.bind(this);
 
 // PUT routes------------------------------------
