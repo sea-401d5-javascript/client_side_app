@@ -1,0 +1,11 @@
+**/node_modules/*
+**/vendor/*
+**/*.min.js
+/*.md
+/package.json
+/npm-debug.log
+/procfile
+/build/**
+**/bundle/*
+karma.*
+**/test/*_bundle*
