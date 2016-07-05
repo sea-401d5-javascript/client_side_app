@@ -11,51 +11,10 @@
     <team-directive critters="sctrl.critters" team="snakes"></team-directive>
   </main>
 
-
-
-
   <main ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
     <h1>Weasels</h1>
     <team-directive critters="wctrl.critters" team="weasels"></team-directive>
   </main>
-
-  <!-- <main ng-controller="SnakesController as snakesctrl" ng-init="snakesctrl.getSnakes()">
-    <h1>Snakes</h1>
-    <ul>
-      <li ng-repeat="snake in snakesctrl.snakes">{{snake.name}}, {{snake.size}}
-        <form  ng-hide="!snake.editing" ng-submit="snakesctrl.updateSnake(snake, update)">
-          <input type="number" ng-model="update.size" placeholder="Update me"/>
-          <button type="submit">Update Snake</button>
-        </form>
-        <button ng-click="snake.editing=!snake.editing">Edit</button>
-        <button ng-click="snakesctrl.deleteSnake(snake)">X</button>
-      </li>
-    </ul>
-    <form ng-submit="snakesctrl.addSnake(snake)">
-      <input ng-model="snakesctrl.snake.name" type="text" placeholder="Snake name" />
-      <input ng-model="snakesctrl.snake.size" type="number" placeholder="Power level" />
-      <button type="submit">New Snake</button>
-    </form>
-  </main>
-
-  <main ng-controller="WeaselsController as weaselsctrl" ng-init="weaselsctrl.getWeasels()">
-    <h1>Weasels</h1>
-    <ul>
-      <li ng-repeat="weasel in weaselsctrl.weasels">{{weasel.name}}, {{weasel.strength}}
-        <form  ng-hide="!weasel.editing" ng-submit="weaselsctrl.updateWeasel(weasel, update)">
-          <input type="number" ng-model="update.strength" placeholder="Update me"/>
-          <button type="submit">Update Weasel</button>
-        </form>
-        <button ng-click="weasel.editing=!weasel.editing">Edit</button>
-        <button ng-click="weaselsctrl.deleteWeasel(weasel)">X</button>
-      </li>
-    </ul>
-    <form ng-submit="weaselsctrl.addWeasel(weasel)">
-      <input ng-model="weaselsctrl.weasel.name" type="text" placeholder="Weasel name"/>
-      <input ng-model="weaselsctrl.weasel.strength" type="number" placeholder="Power level"/>
-      <button type="submit">New Weasel</button>
-    </form>
-  </main> -->
 
   <script src="./bundle.js"></script>
 </body>
