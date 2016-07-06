@@ -1,5 +1,10 @@
+'use strict';
+
 const angular = require('angular');
 
-var sportsApp = angular.module('sportsApp', []);
-require('./nba/nba')(sportsApp);
-require('./nfl/nfl')(sportsApp);
+const app = angular.module('sportsApp', []);
+require('./nba/nba')(app);
+require('./nfl/nfl')(app);
+require('./controller')(app);
+require('./services')(app);
+require('./directives')(app);

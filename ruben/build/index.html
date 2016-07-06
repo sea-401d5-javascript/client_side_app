@@ -3,44 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Sports App</title>
+  <link rel="stylesheet" href="./css/app.css">
 </head>
-<body ng-app="SportsApp">
-  <main ng-controller="NbaController as nbactrl"
-    ng-init="nbactrl.getPlayer()">
-    <!-- <h1>{{playersctrl.}}</h1> -->
+<body ng-app="sportsApp">
+  <main ng-controller="NbaController as nbactrl" ng-init="nbactrl.getPlayer()">
+    <h1>NBA Players</h1>
     <ul>
       <li ng-repeat="player in nbactrl.players">
-      {{player.body}}
-      <button ng-click="player.editing = !player.editing">EDIT</button>
       <form ng-hide="!player.editing" ng-submit="nbactrl.updatePlayer(player, updatedPlayer)">
         <input type="text" ng-model="updatedPlayer"/>
-        <button type="submit">Update</button>
-        <button ng-click="nbactrl.deletePlayer(player)">Delete</button>
+        <button type="submit">Update Player</button>
       </form>
+      <button ng-click="player.editing = !player.editing">Edit</button>
+      <button ng-click="nbactrl.deletePlayer(player)">Delete</button>
       </li>
     </ul>
-    <form ng-submit="nbactrl.addPlayer()">
-      <input ng-model="nbactrl.newPlayer.body" type="text"/>
-      <button type="submit">New Player</button>
+    <form ng-submit="nbactrl.addPlayer(newPlayer)">
+      <input ng-model="nbactrl.newPlayer.name" type="text" placeholder="name"/>
+      <input ng-model="nbactrl.newPlayer.active" type="text" placeholder="active"/>
+      <input ng-model="nbactrl.newPlayer.height" type="number" placeholder="height"/>
+      <input ng-model="nbactrl.newPlayer.championships" type="number" placeholder="championships"/>
+      <button type="submit">Post Player</button>
     </form>
   </main>
-  <main ng-controller="NflController as nflctrl"
-    ng-init="nflctrl.getPlayer()">
-    <!-- <h1>{{playersctrl.}}</h1> -->
+  <main ng-controller="NflController as nflctrl" ng-init="nflctrl.getPlayer()">
+    <h1>NFL Players</h1>
     <ul>
       <li ng-repeat="player in nflctrl.players">
-      {{player.body}}
-      <button ng-click="player.editing = !player.editing">EDIT</button>
       <form ng-hide="!player.editing" ng-submit="nflctrl.updatePlayer(player, updatedPlayer)">
         <input type="text" ng-model="updatedPlayer"/>
-        <button type="submit">Update</button>
-        <button ng-click="nflctrl.deletePlayer(player)">Delete</button>
+        <button type="submit">Update Player</button>
       </form>
+      <button ng-click="player.editing = !player.editing">Edit</button>
+      <button ng-click="nflctrl.deletePlayer(player)">Delete</button>
       </li>
     </ul>
-    <form ng-submit="nflctrl.addPlayer()">
-      <input ng-model="nflctrl.newPlayer.body" type="text"/>
-      <button type="submit">New Player</button>
+    <form ng-submit="nflctrl.addPlayer(player)">
+      <input ng-model="nflctrl.newPlayer.name" type="text" placeholder="name"/>
+      <input ng-model="nflctrl.newPlayer.active" type="text" placeholder="active"/>
+      <input ng-model="nflctrl.newPlayer.weight" type="number" placeholder="weight"/>
+      <input ng-model="nflctrl.newPlayer.championships" type="number" placeholder="championships"/>
+      <button type="submit">Post Player</button>
     </form>
   </main>
   <script src="./bundle.js"></script>
