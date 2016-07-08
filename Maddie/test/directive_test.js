@@ -73,18 +73,36 @@ describe('directive unit testing', () => {
     $scope.$digest();
     $httpBackend.flush();
 
-    // let li = angular.element(directive[0]);
-    //
-    // console.log('huge li', li);
+
     let item = angular.element(directive.find('p')[2]);
     let name = (angular.element(directive.find('p')[0])).text();
     let dogWalkers_bitten = (angular.element(directive.find('p')[1])).text();
-    console.log((item).hasClass('ng-hide'));
-    console.log('text',item.text());
-    console.log('ng-hide',item);
+
 
     expect((item).hasClass('ng-hide')).toBe(true);
     expect(dogWalkers_bitten).toBe('DOGWALKERS BITTEN: 10');
     expect(name).toBe('NAME: Testy');
+  });
+
+  it('should have a different form for edit vs add and resource', () => {
+    $httpBackend.expectGET('./templates/formTemplate.html')
+      .respond(200, formTemplate);
+    $scope.resource = 'frenchies';
+    $scope.form = 'edit';
+
+    let element = angular.element('<div><form-directive resource="{{resource}}" form="{{form}}"></form-directive></div>');
+    element.data('$ngControllerController', {});
+    let link = $compile(element);
+    let directive = link($scope);
+    $scope.$digest();
+    $httpBackend.flush();
+
+    let formTitle = angular.element(directive.find('h3'));
+    let formLabel = angular.element(directive.find('label')[2]);
+    let deleteButton = angular.element(directive.find('button')[0]);
+
+    expect((formTitle).hasClass('ng-hide')).toBe(true);
+    expect((formLabel).hasClass('ng-hide')).toBe(true);
+    expect((deleteButton).hasClass('ng-hide')).toBe(false);
   });
 });
