@@ -64,7 +64,7 @@ describe('directive unit testing', () => {
     };
     $scope.type = 'Frenchies';
 
-    let element = angular.element('<li><item-directive type="{{type}}" animal="animal" ng-repeat="animal in animals.frenchies"></item-directive></li>');
+    let element = angular.element('<ul><item-directive type="{{type}}" animal="animal" ng-repeat="animal in animals.frenchies"></item-directive></ul>');
     element.data('$ngControllerController', {});
     console.log('element', element);
     let link = $compile(element);
@@ -73,7 +73,18 @@ describe('directive unit testing', () => {
     $scope.$digest();
     $httpBackend.flush();
 
-    let item = (directive.find('li')).text();
-    console.log(item);
+    // let li = angular.element(directive[0]);
+    //
+    // console.log('huge li', li);
+    let item = angular.element(directive.find('p')[2]);
+    let name = (angular.element(directive.find('p')[0])).text();
+    let dogWalkers_bitten = (angular.element(directive.find('p')[1])).text();
+    console.log((item).hasClass('ng-hide'));
+    console.log('text',item.text());
+    console.log('ng-hide',item);
+
+    expect((item).hasClass('ng-hide')).toBe(true);
+    expect(dogWalkers_bitten).toBe('DOGWALKERS BITTEN: 10');
+    expect(name).toBe('NAME: Testy');
   });
 });
