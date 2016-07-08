@@ -3,7 +3,6 @@ module.exports = function(app){
     return{
       templateUrl:'./templates/listTemplate.html',
       scope: {
-        //animalArray:'=',
         animals:'=',
         type:'@'
       }

@@ -6,8 +6,8 @@ module.exports = function(app) {
         type:'@',
         animal:'='
       },
-      require:'^^ngController',
-      link: function($scope, elem, attr, controller) {
+      // require:'^^ngController',
+      link: function($scope, elem, attr) {
         $scope.death = $scope.type === 'Frenchies' ? 'dogWalkers_bitten' : 'dogs_died';
       }
     };

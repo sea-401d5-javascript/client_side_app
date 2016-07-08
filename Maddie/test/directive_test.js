@@ -25,7 +25,9 @@ describe('directive unit testing', () => {
       .respond(200, listTemplate);
     $httpBackend.expectGET('./templates/itemTemplate.html')
       .respond(200, itemTemplate);
-    $scope.test = 'Test title';
+    $httpBackend.expectGET('./templates/formTemplate.html')
+      .respond(200, formTemplate);
+    $scope.test = 'Frenchies';
     $scope.animals = {
       frenchies: [{
         name:'test'
@@ -35,15 +37,43 @@ describe('directive unit testing', () => {
         name:'test3'
       }]
     };
-    let link = $compile('<list-directive type="{{test}}" animals="animals.frenchies"></list-directive');
+    let element = angular.element('<list-directive type="{{test}}" animals="animals.frenchies"></list-directive');
+    element.data('$ngControllerController', {});
+    let link = $compile(element);
     let directive = link($scope);
     $scope.$digest();
     $httpBackend.flush();
 
     let list = directive.find('item-directive');
-    let list_title = directive.find('h1');
+    let list_title = (directive.find('h1')).text();
 
     expect(list.length).toBe(3);
-    expect(list_title).toBe('Test title');
+    expect(list_title).toBe('Frenchies');
+  });
+
+  it('should have the name and death variable depending on type of resource', () => {
+    $httpBackend.expectGET('./templates/itemTemplate.html')
+      .respond(200, itemTemplate);
+    $httpBackend.expectGET('./templates/formTemplate.html')
+      .respond(200, formTemplate);
+    $scope.animals = {
+      frenchies:[{
+        name: 'Testy',
+        dogWalkers_bitten: 10
+      }]
+    };
+    $scope.type = 'Frenchies';
+
+    let element = angular.element('<li><item-directive type="{{type}}" animal="animal" ng-repeat="animal in animals.frenchies"></item-directive></li>');
+    element.data('$ngControllerController', {});
+    console.log('element', element);
+    let link = $compile(element);
+    let directive= link($scope);
+    console.log('directive',directive);
+    $scope.$digest();
+    $httpBackend.flush();
+
+    let item = (directive.find('li')).text();
+    console.log(item);
   });
 });
