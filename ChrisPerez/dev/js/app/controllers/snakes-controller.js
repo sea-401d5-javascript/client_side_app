@@ -11,6 +11,15 @@ function SnakesController($http, $location, ErrorHandling, authService){
   this.join = function(){
     $location.url('/signup');
   };
+  this.goSnakes = function(){
+    $location.url('/snakes');
+  };
+  this.goHome = function(){
+    $location.url('/');
+  };
+
+  this.getToken = authService.getToken;
+
   const url = 'http://localhost:2222/snakes/';
   this.getCritters = function(){
     $http.get(url)

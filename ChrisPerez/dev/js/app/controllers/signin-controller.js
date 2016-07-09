@@ -8,10 +8,15 @@ module.exports = function(app){
       $location.url('/signup');
     };
 
+    this.logOut = authService.logOut;
+
+    this.getToken = authService.getToken;
+
     this.signUp = function(user){
       authService.signUp(user)
         .then((res)=>{
           console.log(res, 'in signinctrl');
+          this.goHome();
         })
         .then((err)=>{
           console.log(err);
@@ -22,6 +27,10 @@ module.exports = function(app){
       authService.signIn(user)
         .then((res)=>{
           console.log(res, 'signin res');
+          this.goHome();
+        })
+        .then((err)=>{
+          console.log(err);
         });
     };
   });
