@@ -6,7 +6,9 @@
 </head>
 <body ng-app="SvW-App">
 
-  <main ng-controller="SnakesController as sctrl" ng-init="sctrl.getCritters()">
+  <ng-view></ng-view>
+
+  <!-- <main ng-controller="SnakesController as sctrl" ng-init="sctrl.getCritters()">
     <h1>Snakes</h1>
     <team-directive critters="sctrl.critters" team="snakes"></team-directive>
   </main>
@@ -14,7 +16,7 @@
   <main ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
     <h1>Weasels</h1>
     <team-directive critters="wctrl.critters" team="weasels"></team-directive>
-  </main>
+  </main> -->
 
   <script src="./bundle.js"></script>
 </body>
