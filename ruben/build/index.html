@@ -3,46 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Sports App</title>
+  <link rel="stylesheet" href="./css/app.css">
 </head>
-<body ng-app="SportsApp">
-  <main ng-controller="NbaController as nbactrl"
-    ng-init="nbactrl.getPlayer()">
-    <!-- <h1>{{playersctrl.}}</h1> -->
-    <ul>
-      <li ng-repeat="player in nbactrl.players">
-      {{player.body}}
-      <button ng-click="player.editing = !player.editing">EDIT</button>
-      <form ng-hide="!player.editing" ng-submit="nbactrl.updatePlayer(player, updatedPlayer)">
-        <input type="text" ng-model="updatedPlayer"/>
-        <button type="submit">Update</button>
-        <button ng-click="nbactrl.deletePlayer(player)">Delete</button>
-      </form>
-      </li>
-    </ul>
-    <form ng-submit="nbactrl.addPlayer()">
-      <input ng-model="nbactrl.newPlayer.body" type="text"/>
-      <button type="submit">New Player</button>
-    </form>
-  </main>
-  <main ng-controller="NflController as nflctrl"
-    ng-init="nflctrl.getPlayer()">
-    <!-- <h1>{{playersctrl.}}</h1> -->
-    <ul>
-      <li ng-repeat="player in nflctrl.players">
-      {{player.body}}
-      <button ng-click="player.editing = !player.editing">EDIT</button>
-      <form ng-hide="!player.editing" ng-submit="nflctrl.updatePlayer(player, updatedPlayer)">
-        <input type="text" ng-model="updatedPlayer"/>
-        <button type="submit">Update</button>
-        <button ng-click="nflctrl.deletePlayer(player)">Delete</button>
-      </form>
-      </li>
-    </ul>
-    <form ng-submit="nflctrl.addPlayer()">
-      <input ng-model="nflctrl.newPlayer.body" type="text"/>
-      <button type="submit">New Player</button>
-    </form>
-  </main>
+<body ng-app="sportsApp">
+  <ng-view></ng-view>
+
   <script src="./bundle.js"></script>
 </body>
 </html>

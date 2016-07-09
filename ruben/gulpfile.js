@@ -1,10 +1,11 @@
 'use strict';
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
-const lint = require('gulp-eslint');
+const notify = require('gulp-notify');
+const plumber = require('gulp-plumber');
 
 var paths = {
-  copy: {
+  dev: {
     css: 'app/css/**/*.css',
     html: 'app/**/*.html',
     js: 'app/js/**/*.js',
@@ -25,35 +26,47 @@ gulp.task('watch', function () {
   gulp.watch(paths.dev.test, ['bundle:test']);
 });
 
-gulp.task('copy', () => {
-  return gulp.src(__dirname + '/app/index.html')
-    .pipe(gulp.dest(__dirname + '/build'));
+gulp.task('statichtmlfiles:dev', () => {
+  return gulp.src(paths.dev.html)
+   .pipe(gulp.dest(paths.build.main));
 });
+
+gulp.task('staticcssfiles:dev', () => {
+  return gulp.src(paths.dev.css)
+   .pipe(gulp.dest(paths.build.main));
+});
+
 
 gulp.task('bundle', () => {
   return gulp.src(__dirname + '/app/js/client.js')
-    .pipe(webpack({
-      output: {
-        filename: 'bundle.js'
-      }
-    }))
-    .pipe(gulp.dest(__dirname + '/build'));
+   .pipe(plumber({
+     errorHandler: notify.onError('Error: <%= error.message %>')
+   }))
+   .pipe(webpack({
+     output: {
+       filename: 'bundle.js'
+     }
+   }))
+   .pipe(gulp.dest(paths.build.main));
 });
 
 gulp.task('bundle:test', () => {
-  return gulp.src(__dirname + '/test/*test.js')
-    .pipe(webpack({
-      output: {
-        filename: 'test_bundle.js'
-      }
-    }))
-    .pipe(gulp.dest(__dirname + '/test'));
+  return gulp.src(paths.dev.test)
+ .pipe(plumber({
+   errorHandler: notify.onError('Error: <%= error.message %>')
+ }))
+   .pipe(webpack({
+     output: {
+       filename: 'test_bundle.js'
+     },
+     module: {
+       loaders: [{
+         test: /\.html$/,
+         loader: 'html'
+       }]
+     }
+   }))
+   .pipe(gulp.dest(paths.build.test));
 });
 
-gulp.task('lint' , () => {
-  return gulp.src([paths.dev.js, paths.dev.test])
-    .pipe(lint())
-    .pipe(lint.format());
-});
-
-gulp.task('default', ['bundle', 'copy']);
+gulp.task('default', ['bundle', 'statichtmlfiles:dev', 'staticcssfiles:dev']);
