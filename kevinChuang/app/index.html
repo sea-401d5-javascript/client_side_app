@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Treats Galore</title>
+  </head>
+  <body ng-app="treatApp">
+    <!-- treatctrl.getTreats() -->
+    <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getCookies()">
+      <h1>Cookies</h1>
+        <ul>
+          <li ng-cloak ng-repeat="cookie in treatctrl.cookieArray">
+            Name: {{cookie.name}}, Stock: {{cookie.stock}}
+            <button ng-click="cookie.edit = !cookie.edit">Edit</button>
+            <form ng-hide="!cookie.edit" ng-cloak ng-submit="treatctrl.updateCookie(cookie)">
+              <label>Name:
+                <input type="text" ng-model="cookie.name" placeholder="{{cookie.name}}" required>
+              </label>
+              <label>Stock:
+                <input type="text" ng-model="cookie.stock" placeholder="{{cookie.stock}}" required>
+              </label>
+              <button type="submit" ng-click="cookie.edit = !cookie.edit">Update</button>
+              <button ng-click="treatctrl.deleteCookie(cookie)">Delete</button>
+            </form>
+          </li>
+        </ul>
+
+        <form ng-submit="treatctrl.addCookie()">
+          <h3>Add a cookie</h3>
+          <input type="text" ng-model="treatctrl.cookie.name" placeholder="name" required>
+          <input type="text" ng-model="treatctrl.cookie.stock" placeholder="stock" required>
+          <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getCandy()">
+      <h1>Candy</h1>
+        <ul>
+          <li ng-cloak ng-repeat="candy in treatctrl.candyArray">
+            Name: {{candy.name}}, Stock: {{candy.stock}}
+            <button ng-click="candy.edit = !candy.edit">Edit</button>
+            <form ng-hide="!candy.edit" ng-cloak ng-submit="treatctrl.updateCandy(candy)">
+              <label>Name:
+                <input type="text" ng-model="candy.name" placeholder="{{candy.name}}" required>
+              </label>
+              <label>Stock:
+                <input type="text" ng-model="candy.stock" placeholder="{{candy.stock}}" required>
+              </label>
+              <button type="submit" ng-click="candy.edit = !candy.edit">Update</button>
+              <button ng-click="treatctrl.deleteCandy(candy)">Delete</button>
+            </form>
+          </li>
+        </ul>
+
+        <form ng-submit="treatctrl.addCandy()">
+          <h3>Add a candy</h3>
+          <input type="text" ng-model="treatctrl.candy.name" placeholder="name">
+          <input type="text" ng-model="treatctrl.candy.stock" placeholder="stock">
+          <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <main ng-controller="TreatsController as treatctrl" ng-init="treatctrl.getTreats()">
+      <h1>Directive test</h1>
+      <ul>
+        <li ng-cloak ng-repeat="candy in treatctrl.candyArray">
+          name: {{candy.name}}, Stock: {{candy.stock}}
+          <treat-form treat="{}" formtype="edit" type="candy"></treat-form>
+        </li>
+      </ul>
+      <treat-form treat="{}" formtype="new" type="candy"></treat-form>
+    </main>
+
+    <div ng-controller="ErrorController as errorctrl">
+      <ul>
+        <li ng-repeat="error in errorctrl.errors">{{error}}</li>
+      </ul>
+    </div>
+    <script src="./bundle.js" charset="utf-8"></script>
+  </body>
+</html>
