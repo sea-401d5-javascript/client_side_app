@@ -16,6 +16,7 @@ module.exports = function(app) {
           array.push(res.data);
           treat = null;
         }, (err) => {
+          $location.url('/signin');
           console.log(err);
         });
     };
