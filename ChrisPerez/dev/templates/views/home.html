@@ -1,0 +1,17 @@
+<main>
+  <section ng-controller="SnakesController as sctrl" ng-init="sctrl.getCritters()">
+    <h1>Snakes</h1>
+    <team-directive critters="sctrl.critters" team="snakes"></team-directive>
+    <h2>Log in to edit the team</h2>
+    <button ng-click="sctrl.login()">Log in</button>
+    <button ng-click="sctrl.join()">Join</button>
+  </section>
+
+  <section ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
+    <h1>Weasels</h1>
+    <team-directive critters="wctrl.critters" team="weasels"></team-directive>
+    <h2>Log in to edit the team</h2>
+    <button ng-click="wctrl.login()">Log in</button>
+    <button ng-click="wctrl.join()">Join</button>
+  </section>
+</main>

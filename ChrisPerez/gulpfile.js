@@ -13,15 +13,20 @@ gulp.task('clean', ()=>{
     .pipe(clean());
 });
 
-gulp.task('copy', ()=>{
-  gulp.src(paths.html)
-    .pipe(gulp.dest('./build'));
-  gulp.src(paths.css)
+gulp.task('copy-html', ['clean'], ()=>{
+  return gulp.src(paths.html)
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('bundle', ()=>{
-  gulp.src(paths.js)
+gulp.task('copy-css', ['clean'],()=>{
+  return gulp.src(paths.css)
+    .pipe(gulp.dest('./build'));
+});
+
+gulp.task('copy', ['copy-html', 'copy-css']);
+
+gulp.task('bundle', ['clean'], ()=>{
+  return gulp.src(paths.js)
     .pipe(webpack({
       output: {
         filename: 'bundle.js'
