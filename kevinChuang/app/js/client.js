@@ -1,5 +1,6 @@
 const angular = require('angular');
-var treatApp = angular.module('treatApp',[]);
+const ngRoute = require('angular-route');
+var treatApp = angular.module('treatApp',[ngRoute]);
 require('./controller')(treatApp);
 require('./directives')(treatApp);
 require('./services')(treatApp);

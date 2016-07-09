@@ -3,7 +3,7 @@ module.exports = function(app) {
 };
 
 
-function TreatsController($http, ErrorService, TreatService) {
+function TreatsController($http, ErrorService, TreatService, AuthService, $location) {
   this.$http = $http;
   this.cookieUrl = 'http://localhost:3000/cookies';
   this.candyUrl = 'http://localhost:3000/candy';
@@ -11,6 +11,40 @@ function TreatsController($http, ErrorService, TreatService) {
   this.candyArray = [];
   this.getTreats = TreatService.getTreats;
   this.addTreat = TreatService.addTreat;
+
+  this.goHome = function() {
+    $location.url('/');
+  };
+
+  this.signUp = function(user) {
+    AuthService.signUp(user)
+    .then((res) => {
+      console.log(res);
+    })
+    .then((err) => {
+      console.log(err);
+    });
+  };
+
+  this.signIn = function(user) {
+    AuthService.signIn(user)
+    .then((res) => {
+      console.log(res, 'signin res');
+    });
+  };
+
+  app.config(function($routeProvider) {
+    $routeProvider.when('/', {
+      templateUrl: './index.html',
+      controller: 'TreatsController',
+      controllerAs: 'treatctrl'
+    })
+    .when('/signin', {
+      templateUrl:'./views/signin.html',
+      controller:'TreatsController',
+      controllerAs: 'treatctrl'
+    });
+  })
 }
 // GET routes------------------------------------
 
