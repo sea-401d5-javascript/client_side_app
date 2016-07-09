@@ -1,4 +1,5 @@
 <main ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
   <h1>Weasels</h1>
   <team-directive critters="wctrl.critters" team="weasels"></team-directive>
+  <button ng-click="wctrl.goHome()">Home</button>
 </main>

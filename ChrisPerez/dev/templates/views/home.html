@@ -1,17 +1,36 @@
 <main>
   <section ng-controller="SnakesController as sctrl" ng-init="sctrl.getCritters()">
     <h1>Snakes</h1>
-    <team-directive critters="sctrl.critters" team="snakes"></team-directive>
-    <h2>Log in to edit the team</h2>
-    <button ng-click="sctrl.login()">Log in</button>
-    <button ng-click="sctrl.join()">Join</button>
+    <ul>
+      <li ng-repeat="critter in sctrl.critters">
+        <h2>Name: {{critter.name}}</h2>
+        <h3>Power: {{critter.size}}</h3>
+      </li>
+    </ul>
+    <div ng-if="!sctrl.getToken()">
+      <h2>Log in to edit the team</h2>
+      <button ng-click="sctrl.login()">Log in</button>
+      <button ng-click="sctrl.join()">Join</button>
+    </div>
+    <button ng-if="sctrl.getToken()" ng-click="sctrl.goSnakes()">Edit Snakes</button>
   </section>
 
   <section ng-controller="WeaselsController as wctrl" ng-init="wctrl.getCritters()">
     <h1>Weasels</h1>
-    <team-directive critters="wctrl.critters" team="weasels"></team-directive>
-    <h2>Log in to edit the team</h2>
-    <button ng-click="wctrl.login()">Log in</button>
-    <button ng-click="wctrl.join()">Join</button>
+    <ul>
+      <li ng-repeat="critter in wctrl.critters">
+        <h2>Name: {{critter.name}}</h2>
+        <h3>Power: {{critter.strength}}</h3>
+      </li>
+    </ul>
+    <div ng-if="!wctrl.getToken()">
+      <h2>Log in to edit the team</h2>
+      <button ng-click="wctrl.login()">Log in</button>
+      <button ng-click="wctrl.join()">Join</button>
+    </div>
+    <button ng-if="wctrl.getToken()" ng-click="wctrl.goWeasels()">Edit Weasels</button>
   </section>
+  <div ng-controller="SigninController as signinctrl">
+    <button ng-click="signinctrl.logOut()">Log Out</button>
+  </div>
 </main>

@@ -11,6 +11,15 @@ function WeaselsController($http, $location, ErrorHandling, authService){
   this.join = function(){
     $location.url('/signup');
   };
+  this.goWeasels = function(){
+    $location.url('/weasels');
+  };
+  this.goHome = function(){
+    $location.url('/');
+  };
+
+  this.getToken = authService.getToken;
+
   const url = 'http://localhost:2222/weasels/';
   this.getCritters = function(){
     $http.get(url)
