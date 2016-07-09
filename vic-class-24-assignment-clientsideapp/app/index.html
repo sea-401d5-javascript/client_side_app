@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ice Creamery</title>
+</head>
+<body ng-app="IceCreameryApp">
+  <main>
+    <section ng-cloak ng-controller="IceCreamController as icctrl">
+      <icecream-order-history ng-init="icctrl.getIceCream()" icecreams="icctrl.icecream" ng-click="icctrl.icecream.edit = !icctrl.icecream.edit">
+      </icecream-order-history>
+    </section>
+    <section ng-cloak ng-controller="MilkShakeController as msctrl">
+      <milkshake-order-history ng-init="msctrl.getMilkShake()" milkshakes="msctrl.milkshake" ng-click="msctrl.milkshake.edit = !msctrl.milkshake.edit">
+      </milkshake-order-history>
+    </section>
+  </main>
+  <script src="./bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<li ng-repeat="milkshake in milkshakes">
+  Order: flavor: <span>{{milkshake.flavor}}</span> scoops: <span>{{milkshake.scoops}}</span> milk richness: <span>{{milkshake.milkRichness}}</span>
+  <button ng-click="milkshake.edit = !milkshake.edit">Edit</button>
+  <milkshake-update-order milkshake="milkshake" ng-hide="!milkshake.edit">
+  </milkshake-update-order>
+</li>

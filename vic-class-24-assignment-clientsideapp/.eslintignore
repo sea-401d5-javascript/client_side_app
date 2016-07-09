@@ -1,0 +1,9 @@
+**/node_modules/*
+**/vendor/*
+**/build/*
+**/test/*_bundle.js
+**/*.min.js
+*.md
+package.json
+Procfile
+npm-debug.log
