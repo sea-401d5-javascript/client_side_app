@@ -1,0 +1,11 @@
+<h2>{{venue.name}}</h2>
+  <p>{{venue.neighborhood}}</p>
+  <p>Serves Alcohol: {{venue.servesAlcohol}}</p>
+  <button ng-click="venue.editing = !venue.editing">Edit</button>
+    <button ng-hide="!venue.editing" ng-click="deleteVenue(venue)">Delete</button>
+    <form ng-hide="!venue.editing" ng-submit="updateVenue(venue, updatedVenue)">
+      <input type="text" ng-model="updatedVenue.name"/>
+      <input type="text" ng-model="updatedVenue.neighborhood"/>
+      <input type="boolean" ng-model="updatedVenue.servesAlcohol"/>
+      <button type="submit">Update Venue</button>
+    </form>
