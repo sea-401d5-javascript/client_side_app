@@ -1,0 +1,17 @@
+<div ng-if="plant">
+  <ul>
+    <li><strong>{{currentresource.commonName}}</strong></li>
+    <li><em>{{currentresource.scientificName}}</em></li>
+    <li>Medicinal Uses: {{currentresource.medicinalUses}}</li>
+    <li>Nutritional Value: {{currentresource.nutritionalValue}}</li>
+    <li>Zone: {{currentresource.zone}}</li>
+  </ul>
+</div>
+
+<div ng-if="supplement">
+  <ul>
+    <li><strong>{{currentresource.name}}</strong></li>
+    <li>Medicinal Effects: {{currentresource.medicinalEffects}}</li>
+    <li>Side Effects: {{currentresource.sideEffects}}</li>
+  </ul>
+</div>

@@ -50,15 +50,66 @@
 	__webpack_require__(3);
 	__webpack_require__(4);
 
+	const formTemplate = __webpack_require__(11);
+	const itemTemplate = __webpack_require__(12);
+	const listTemplate = __webpack_require__(13);
+
 	describe('plants controller tests', () => {
-	  let plantsctrl;
+	  let rctrl;
 	  let $httpBackend;
+	  let parseService;
+	  let $http;
 
 	  beforeEach(() => {
 	    angular.mock.module('HealthApp');
-	    angular.mock.inject(function($controller, _$httpBackend_){
-	      plantsctrl = new $controller('PlantsController');
+
+	    angular.mock.inject(function($controller, _$httpBackend_, _$http_, ParseService){
+	      $http = _$http_;
+	      parseService = ParseService;
+	      rctrl = $controller('ResourceController', {});
 	      $httpBackend = _$httpBackend_;
+	    });
+
+	    angular.mock.module({
+	      'ParseService': {
+	        plants: [],
+	        supplements: [],
+	        constructResource: function() {
+	          return function(addedResource) {
+	            let added = addedResource.data;
+	            for (let key in added) {
+	              if (key === 'zone') added[key] = parseInt(added[key]);
+	              added[key] = Array.isArray(added[key]) && added[key].length > 1 ? added[key].split(',') : added[key];
+	            }
+	            if (added.commonName) this.plants.push(added);
+	            if (added.name) this.supplements.push(added);
+	            return added;
+	          };
+	        },
+	        fetchPlants: function() {
+	          $http.get('http://localhost:3000/plants')
+	          .then((res) => {
+	            this.plants = res.data;
+	          }, (err) => {
+	            console.log(err);
+	          });
+	        },
+	        fetchSupplements: function() {
+	          return $http.get('http://localhost:3000/supplements')
+	          .then((res) => {
+	            this.supplements = res.data;
+	          }, (err) => {
+	            console.log(err);
+	          });
+	        },
+	        update: function(cb) {
+	          this.fetchPlants().then(() => {
+	            this.fetchSupplements().then(() => {
+	              cb();
+	            });
+	          });
+	        }
+	      }
 	    });
 	  });
 
@@ -67,31 +118,53 @@
 	    $httpBackend.verifyNoOutstandingRequest();
 	  });
 
-	  it('should have a plants array', () => {
-	    expect(Array.isArray(plantsctrl.plants)).toBe(true);
+	  it('should have a resouces arrays', () => {
+	    expect(Array.isArray(parseService.plants)).toBe(true);
+	    expect(Array.isArray(parseService.supplements)).toBe(true);
 	  });
 
 	  it('should get a list of plants', () => {
 	    $httpBackend.expectGET('http://localhost:3000/plants')
-	      .respond(200, {commonName: 'test', scientificName: 'test', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0});
+	      .respond(200, {commonName: 'test', scientificName: 'test', medicinalUses: ['test', 'test2'], nutritionalValue: ['test', 'test2'], zone: 0});
 
-	    plantsctrl.getPlants();
+	    rctrl.getPlants();
 	    $httpBackend.flush();
-	    expect(plantsctrl.plants.commonName).toBe('test');
-	    expect(plantsctrl.plants.scientificName).toBe('test');
-	    expect(plantsctrl.plants.medicinalUses[0]).toBe('test');
-	    expect(plantsctrl.plants.nutritionalValue[0]).toBe('test');
-	    expect(plantsctrl.plants.zone).toBe(0);
+	    expect(rctrl.plants.commonName).toBe('test');
+	    expect(rctrl.plants.scientificName).toBe('test');
+	    expect(rctrl.plants.medicinalUses[0]).toBe('test');
+	    expect(rctrl.plants.nutritionalValue[0]).toBe('test');
+	    expect(rctrl.plants.zone).toBe(0);
+	  });
+
+	  it('should get a list of supplements', () => {
+	    $httpBackend.expectGET('http://localhost:3000/supplements')
+	      .respond(200, {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']});
+
+	    rctrl.getSupplements();
+	    $httpBackend.flush();
+	    expect(rctrl.supplements.name).toBe('test');
+	    expect(rctrl.supplements.medicinalEffects[0]).toBe('test');
+	    expect(rctrl.supplements.sideEffects[0]).toBe('test');
 	  });
 
 	  it('should add a plant', () => {
 	    $httpBackend.expectPOST('http://localhost:3000/plants')
 	      .respond(200, {commonName: 'test', scientificName: 'test', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0});
 
-	    plantsctrl.newPlant = {commonName: 'test', scientificName: 'test', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0};
-	    plantsctrl.addPlant();
+	    rctrl.updated = {commonName: 'test', scientificName: 'test', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0};
+	    rctrl.addPlant();
 	    $httpBackend.flush();
-	    expect(plantsctrl.newPlant).toBe(null);
+	    expect(rctrl.plants.length).toBe(1);
+	  });
+
+	  it('should add a supplement', () => {
+	    $httpBackend.expectPOST('http://localhost:3000/supplements')
+	      .respond(200, {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']});
+
+	    rctrl.updated = {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']};
+	    rctrl.addSupplement();
+	    $httpBackend.flush();
+	    expect(rctrl.updated).toEqual({});
 	  });
 
 	  it('should delete a plant', () => {
@@ -99,10 +172,21 @@
 	    $httpBackend.expectDELETE('http://localhost:3000/plants/1')
 	      .respond(200, {message: 'deleted'});
 
-	    plantsctrl.plants.push(testPlant);
-	    plantsctrl.deletePlant(testPlant);
+	    rctrl.plants.push(testPlant);
+	    rctrl.deletePlant(testPlant);
 	    $httpBackend.flush();
-	    expect(plantsctrl.plants.length).toBe(0);
+	    expect(rctrl.plants.length).toBe(0);
+	  });
+
+	  it('should delete a supplement', () => {
+	    let testSupplement = {_id: 1, name: 'test', medicinalEffects: ['test'], sideEffects: ['test']};
+	    $httpBackend.expectDELETE('http://localhost:3000/supplements/1')
+	      .respond(200, {message: 'deleted'});
+
+	    rctrl.supplements.push(testSupplement);
+	    rctrl.deleteSupplement(testSupplement);
+	    $httpBackend.flush();
+	    expect(rctrl.supplements.length).toBe(0);
 	  });
 
 	  it('should update a plant', () => {
@@ -111,69 +195,16 @@
 	    $httpBackend.expectPUT('http://localhost:3000/plants')
 	      .respond(200, {message: 'updated'});
 
-	    plantsctrl.plants.push(testPlant);
-	    plantsctrl.updatePlant(testPlant, updatedPlant);
+	    rctrl.currentresource = testPlant;
+	    rctrl.plants.push(testPlant);
+	    rctrl.updatePlant(updatedPlant);
 	    $httpBackend.flush();
-	    expect(plantsctrl.plants.length).toBe(1);
-	    expect(plantsctrl.plants[0].commonName).toBe('test2');
-	    expect(plantsctrl.plants[0].scientificName).toBe('test');
-	    expect(plantsctrl.plants[0].medicinalUses[0]).toBe('test');
-	    expect(plantsctrl.plants[0].nutritionalValue[0]).toBe('test');
-	    expect(plantsctrl.plants[0].zone).toBe(2);
-	  });
-	});
-
-	describe('supplement controller tests', () => {
-	  let supplementsctrl;
-	  let $httpBackend;
-
-	  beforeEach(() => {
-	    angular.mock.module('HealthApp');
-	    angular.mock.inject(function($controller, _$httpBackend_){
-	      supplementsctrl = new $controller('SupplementsController');
-	      $httpBackend = _$httpBackend_;
-	    });
-	  });
-
-	  afterEach(() => {
-	    $httpBackend.verifyNoOutstandingExpectation();
-	    $httpBackend.verifyNoOutstandingRequest();
-	  });
-
-	  it('should have a supplements array', () => {
-	    expect(Array.isArray(supplementsctrl.supplements)).toBe(true);
-	  });
-
-	  it('should get a list of supplements', () => {
-	    $httpBackend.expectGET('http://localhost:3000/supplements')
-	      .respond(200, {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']});
-
-	    supplementsctrl.getSupplements();
-	    $httpBackend.flush();
-	    expect(supplementsctrl.supplements.name).toBe('test');
-	    expect(supplementsctrl.supplements.medicinalEffects[0]).toBe('test');
-	    expect(supplementsctrl.supplements.sideEffects[0]).toBe('test');
-	  });
-
-	  it('should add a supplement', () => {
-	    $httpBackend.expectPOST('http://localhost:3000/supplements')
-	      .respond(200, {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']});
-
-	    supplementsctrl.newSupplement = {name: 'test', medicinalEffects: ['test'], sideEffects: ['test']};
-	    supplementsctrl.addSupplement();
-	    $httpBackend.flush();
-	    expect(supplementsctrl.newSupplement).toBe(null);
-	  });
-
-	  it('should delete a supplement', () => {
-	    let testSupplement = {_id: 1, name: 'test', medicinalEffects: ['test'], sideEffects: ['test']};
-	    $httpBackend.expectDELETE('http://localhost:3000/supplements/1')
-	      .respond(200, {message: 'deleted'});
-
-	    supplementsctrl.supplements.push(testSupplement);
-	    supplementsctrl.deleteSupplement(testSupplement);
-	    $httpBackend.flush();
-	    expect(supplementsctrl.supplements.length).toBe(0);
+	    expect(rctrl.plants.length).toBe(1);
+	    expect(rctrl.plants[0].commonName).toBe('test2');
+	    expect(rctrl.plants[0].scientificName).toBe('test');
+	    expect(rctrl.plants[0].medicinalUses[0]).toBe('test');
+	    expect(rctrl.plants[0].nutritionalValue[0]).toBe('test');
+	    expect(rctrl.plants[0].zone).toBe(2);
 	  });
 
 	  it('should update a supplement', () => {
@@ -182,13 +213,113 @@
 	    $httpBackend.expectPUT('http://localhost:3000/supplements')
 	      .respond(200, {message: 'updated'});
 
-	    supplementsctrl.supplements.push(testSupplement);
-	    supplementsctrl.updateSupplement(testSupplement, updatedSupplement);
+	    rctrl.currentresource = testSupplement;
+	    rctrl.supplements.push(testSupplement);
+	    rctrl.updateSupplement(updatedSupplement);
 	    $httpBackend.flush();
-	    expect(supplementsctrl.supplements.length).toBe(1);
-	    expect(supplementsctrl.supplements[0].name).toBe('test2');
-	    expect(supplementsctrl.supplements[0].medicinalEffects[0]).toBe('test2');
-	    expect(supplementsctrl.supplements[0].sideEffects[0]).toBe('test');
+	    expect(rctrl.supplements.length).toBe(1);
+	    expect(rctrl.supplements[0].name).toBe('test2');
+	    expect(rctrl.supplements[0].medicinalEffects[0]).toBe('test2');
+	    expect(rctrl.supplements[0].sideEffects[0]).toBe('test');
+	  });
+	});
+
+	describe('directive tests', () => {
+	  let $httpBackend;
+	  let $scope;
+	  let $compile;
+
+	  beforeEach(() => {
+	    angular.mock.module('HealthApp');
+	    angular.mock.inject(function(_$httpBackend_, $rootScope, _$compile_) {
+	      $scope = $rootScope.$new();
+	      $compile = _$compile_;
+	      $httpBackend = _$httpBackend_;
+	    });
+	  });
+
+	  it('should have list the common name of resources', () => {
+	    $httpBackend.expectGET('./templates/list.html')
+	      .respond(200, listTemplate);
+
+	    $scope.resource = {commonName: 'test'};
+	    let element = angular.element('<list-directive resource="resource"></list-directive>');
+	    element.data('$ngControllerController', {});
+	    let link = $compile(element);
+	    let directive = link($scope);
+	    $scope.$digest();
+	    $httpBackend.flush();
+
+	    let textElement = directive.find('p')[1];
+	    let text = textElement.innerText;
+	    expect(text).toBe('test');
+	  });
+
+	  it('should only list the relevant resource', () => {
+	    $httpBackend.expectGET('./templates/list.html')
+	      .respond(200, listTemplate);
+
+	    $scope.resource = {commonName: 'test'};
+	    let element = angular.element('<list-directive resource="resource"></list-directive>');
+	    element.data('$ngControllerController', {});
+	    let link = $compile(element);
+	    let directive = link($scope);
+	    $scope.$digest();
+	    $httpBackend.flush();
+
+	    let hiddenResource = directive.find('.ng-hide');
+	    expect(hiddenResource);
+	  });
+
+	  it('should show resource attributes on the item view', () => {
+	    $httpBackend.expectGET('./templates/item.html')
+	      .respond(200, itemTemplate);
+
+	    $scope.resource = {commonName: 'test', scientificName: 'testScience', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0};
+	    let element = angular.element('<item-directive currentresource="resource" plant="plant"></item-directive>');
+	    element.data('$ngControllerController', {});
+	    let link = $compile(element);
+	    let directive = link($scope);
+	    $scope.$digest();
+	    $httpBackend.flush();
+
+	    let listItems = directive.find('li');
+	    expect(listItems.length).toBe(5);
+	  });
+
+	  it('should have forms to add and update resources', () => {
+	    $httpBackend.expectGET('./templates/form.html')
+	      .respond(200, formTemplate);
+	    $scope.resource = {commonName: 'test', scientificName: 'testScience', medicinalUses: ['test'], nutritionalValue: ['test'], zone: 0};
+	    let element = angular.element('<form-directive resource="plant" currentresource="resource"></form-directive>');
+	    element.data('$ngControllerController', {});
+	    let link = $compile(element);
+	    let directive = link($scope);
+	    $scope.$digest();
+	    $httpBackend.flush();
+
+	    let inputs = directive.find('input');
+	    expect(inputs.length).toBe(5);
+	  });
+	});
+
+	describe('Parse service tests', () => {
+	  let parseService;
+	  console.log('parse service', parseService);
+
+	  beforeEach(() => {
+	    angular.mock.module('HealthApp');
+	    angular.mock.inject(function(ParseService) {
+	      parseService = ParseService;
+	    });
+	  });
+
+	  it('should have a method to add a resource', () => {
+	    expect(typeof parseService.constructResource).toBe('function');
+	  });
+
+	  it('should return an object with properties', () => {
+	    expect(typeof parseService.constructResource('plant', {})({}).toBe('object'));
 	  });
 	});
 
@@ -34815,88 +34946,178 @@
 	const app = angular.module('HealthApp', []);
 
 	__webpack_require__(5)(app);
-	__webpack_require__(7)(app);
+	__webpack_require__(6)(app);
+	__webpack_require__(10)(app);
 
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(6)(app);
-	};
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	module.exports = function(app) {
-	  app.controller('PlantsController', ['$http', PlantsController]);
+	  app.controller('ResourceController', ['$http', 'ParseService', ResourceController]);
 	};
 
-	function PlantsController($http) {
-	  this.plants = [];
+	function ResourceController($http, ParseService) {
 	  this.$http = $http;
-	}
+	  this.mode = 'list';
+	  this.editing = false;
+	  this.currentresource;
+	  this.updated = {};
 
-	PlantsController.prototype.getPlants = function() {
-	  this.$http.get('http://localhost:3000/plants')
-	  .then((res) => {
-	    this.plants = res.data;
-	  }, (err) => {
-	    console.log(err);
-	  });
-	};
+	  this.toggleItem = function(resource) {
+	    if (resource) this.currentresource = resource;
+	    this.mode === 'list' ? this.mode = 'item' : this.mode = 'list';
+	  }.bind(this);
 
-	PlantsController.prototype.addPlant = function() {
-	  this.$http.post('http://localhost:3000/plants', this.newPlant)
-	  .then((res) => {
-	    let medicinalUsesArray = res.data.medicinalUses[0].split(',') || res.data.medicinalUses[0];
-	    res.data.medicinalUses = medicinalUsesArray;
-	    let nutritionalValueArray = res.data.nutritionalValue[0].split(',') || res.data.nutritionalValue[0];
-	    res.data.nutritionalValue = nutritionalValueArray;
-	    this.plants.push(res.data);
-	    this.newPlant = null;
-	  }, (err) => {
-	    console.log(err);
-	  });
-	};
+	  this.init = function() {
+	    ParseService.update(() => {
+	      this.supplements = ParseService.supplements;
+	      this.plants = ParseService.plants;
+	    });
+	  };
 
-	PlantsController.prototype.deletePlant = function(plant) {
-	  this.$http.delete(`http://localhost:3000/plants/${plant._id}`)
-	  .then(() => {
-	    this.plants.splice(this.plants.indexOf(plant), 1);
-	  }, (err) => {
-	    console.log(err);
-	  });
-	};
+	  this.addPlant = function() {
+	    $http.post('http://localhost:3000/plants', this.updated)
+	    .then(ParseService.constructResource)
+	    .then(ParseService.update(() => {
+	      this.supplements = ParseService.supplements;
+	      this.plants = ParseService.plants;
+	    })), (err) => {
+	      console.log(err);
+	    };
+	  };
 
-	PlantsController.prototype.updatePlant = function(plant, updatedPlant) {
-	  if (updatedPlant.commonName) plant.commonName = updatedPlant.commonName;
-	  if (updatedPlant.scientificName) plant.scientificName = updatedPlant.scientificName;
-	  if (updatedPlant.medicinalUses) plant.medicinalUses = updatedPlant.medicinalUses.split(',') || updatedPlant.medicinalUses;
-	  if (updatedPlant.nutritionalValue) plant.nutritionalValue = updatedPlant.nutritionalValue.split(',') || updatedPlant.nutritionalValue;
-	  if (updatedPlant.zone) plant.zone = updatedPlant.zone;
-	  this.$http.put('http://localhost:3000/plants', plant)
+	  this.deletePlant = function(plant) {
+	    $http.delete(`http://localhost:3000/plants/${plant._id}`)
 	    .then(() => {
-	      this.plants = this.plants.map(p => {
-	        return p._id === plant._id ? plant : p;
+	      ParseService.plants.splice(ParseService.plants.indexOf(plant), 1);
+	      ParseService.update(() => {
+	        this.supplements = ParseService.supplements;
+	        this.plants = ParseService.plants;
 	      });
 	    }, (err) => {
 	      console.log(err);
 	    });
+	  };
+
+	  this.updatePlant = function(updated) {
+	    if (updated.commonName) this.currentresource.commonName = updated.commonName;
+	    if (updated.scientificName) this.currentresource.scientificName = updated.scientificName;
+	    if (updated.medicinalUses) this.currentresource.medicinalUses = updated.medicinalUses.split(',') || updated.medicinalUses;
+	    if (updated.nutritionalValue) this.currentresource.nutritionalValue = updated.nutritionalValue.split(',') || updated.nutritionalValue;
+	    if (updated.zone) this.currentresource.zone = parseInt(updated.zone);
+	    $http.put('http://localhost:3000/plants', this.currentresource)
+	      .then(() => {
+	        ParseService.plants = ParseService.plants.map(p => {
+	          return p._id === this.currentresource._id ? this.currentresource : p;
+	        });
+	        ParseService.update(() => {
+	          this.supplements = ParseService.supplements;
+	          this.plants = ParseService.plants;
+	        });
+	      }, (err) => {
+	        console.log(err);
+	      });
+	    this.updated = {};
+	  }.bind(this);
+
+	  this.addSupplement = function() {
+	    $http.post('http://localhost:3000/supplements', this.updated)
+	    .then(ParseService.constructResource)
+	    .then(ParseService.update(() => {
+	      this.supplements = ParseService.supplements;
+	      this.plants = ParseService.plants;
+	    })), (err) => {
+	      console.log(err);
+	    };
+	  };
+
+	  this.deleteSupplement = function(supplement) {
+	    $http.delete(`http://localhost:3000/supplements/${supplement._id}`)
+	    .then(() => {
+	      ParseService.supplements.splice(ParseService.supplements.indexOf(supplement), 1);
+	      ParseService.update(() => {
+	        this.supplements = ParseService.supplements;
+	        this.plants = ParseService.plants;
+	      });
+	    }, (err) => {
+	      console.log(err);
+	    });
+	  };
+
+	  this.updateSupplement = function(updated) {
+	    if (updated.name) this.currentresource.name = updated.name;
+	    if (updated.medicinalEffects) this.currentresource.medicinalEffects = updated.medicinalEffects.split(',') || updated.medicinalEffects;
+	    if (updated.sideEffects) this.currentresource.sideEffects = updated.sideEffects.split(',') || updated.sideEffects;
+	    $http.put('http://localhost:3000/supplements', this.currentresource)
+	      .then(() => {
+	        ParseService.supplements = ParseService.supplements.map(s => {
+	          return s._id === this.currentresource._id ? this.currentresource : s;
+	        });
+	        ParseService.update(() => {
+	          this.supplements = ParseService.supplements;
+	          this.plants = ParseService.plants;
+	        });
+	        this.updated = {};
+	      }, (err) => {
+	        console.log(err);
+	      });
+	  }.bind(this);
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = function(app) {
+	  __webpack_require__(7)(app);
+	  __webpack_require__(8)(app);
+	  __webpack_require__(9)(app);
 	};
 
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
+
+	'use strict';
 
 	module.exports = function(app) {
-	  __webpack_require__(8)(app);
+	  app.directive('formDirective', function() {
+	    return {
+	      scope: {
+	        type: '@',
+	        resource: '@',
+	        updated: '=',
+	        currentresource: '='
+	      },
+	      templateUrl: './templates/form.html',
+	      require: '^^ngController',
+	      link: function($scope, elem, attr, controller) {
+	        let configMethods = {
+	          plant: function($scope) {
+	            $scope.delete = controller.deletePlant;
+	            $scope.submit = $scope.type === 'new' ? controller.addPlant : controller.updatePlant;
+	            $scope.formMessage = $scope.type === 'new' ? 'Add a New Plant' : 'Update Plant';
+	            $scope.resourceProps = ['commonName', 'scientificName', 'medicinalUses', 'nutritionalValue', 'zone'];
+	          },
+	          supplement: function($scope) {
+	            $scope.delete = controller.deleteSupplement;
+	            $scope.submit = $scope.type === 'new' ? controller.addSupplement : controller.updateSupplement;
+	            $scope.formMessage = $scope.type === 'new' ? 'Add a New Supplement' : 'Update Supplement';
+	            $scope.resourceProps = ['name', 'medicinalEffects', 'sideEffects'];
+	          }
+	        };
+	        configMethods[$scope.resource]($scope);
+	      }
+	    };
+	  });
 	};
 
 
@@ -34907,61 +35128,123 @@
 	'use strict';
 
 	module.exports = function(app) {
-	  app.controller('SupplementsController', ['$http', SupplementsController]);
-	};
-
-	function SupplementsController($http) {
-	  this.supplements = [];
-	  this.$http = $http;
-	}
-
-	SupplementsController.prototype.getSupplements = function() {
-	  this.$http.get('http://localhost:3000/supplements')
-	  .then((res) => {
-	    console.log('res data', res.data)
-	    this.supplements = res.data;
-	  }, (err) => {
-	    console.log(err);
+	  app.directive('itemDirective', function() {
+	    return {
+	      scope: {
+	        plant: '@',
+	        supplement: '@',
+	        currentresource: '='
+	      },
+	      templateUrl: './templates/item.html',
+	      link: function($scope, elem, attr, controller) {
+	        $scope.toggleItem = controller.toggleItem;
+	      },
+	      require: '^^ngController'
+	    };
 	  });
 	};
 
-	SupplementsController.prototype.addSupplement = function() {
-	  this.$http.post('http://localhost:3000/supplements', this.newSupplement)
-	  .then((res) => {
-	    let medicinalEffectsArray = res.data.medicinalEffects[0].split(',') || res.data.medicinalEffects[0];
-	    res.data.medicinalEffects = medicinalEffectsArray;
-	    let sideEffectsArray = res.data.sideEffects[0].split(',') || res.data.sideEffects[0];
-	    res.data.sideEffects = sideEffectsArray;
-	    this.supplements.push(res.data);
-	    this.newSupplement = null;
-	  }, (err) => {
-	    console.log(err);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	
+
+	module.exports = function(app) {
+	  app.directive('listDirective', function() {
+	    return {
+	      scope: {
+	        type: '@',
+	        resource: '=',
+	        plant: '@',
+	        supplement: '@'
+	      },
+	      templateUrl: './templates/list.html',
+	      link: function($scope, elem, attr, controller) {
+	        $scope.toggleItem = controller.toggleItem;
+	        $scope.currentresource = controller.currentresource;
+	      },
+	      require: '^ngController'
+	    };
 	  });
 	};
 
-	SupplementsController.prototype.deleteSupplement = function(supplement) {
-	  this.$http.delete(`http://localhost:3000/supplements/${supplement._id}`)
-	  .then(() => {
-	    this.supplements.splice(this.supplements.indexOf(supplement), 1);
-	  }, (err) => {
-	    console.log(err);
-	  });
-	};
 
-	SupplementsController.prototype.updateSupplement = function(supplement, updatedSupplement) {
-	  if (updatedSupplement.name) supplement.name = updatedSupplement.name;
-	  if (updatedSupplement.medicinalEffects) supplement.medicinalEffects = updatedSupplement.medicinalEffects.split(',') || updatedSupplement.medicinalEffects;
-	  if (updatedSupplement.sideEffects) supplement.sideEffects = updatedSupplement.sideEffects.split(',') || updatedSupplement.sideEffects;
-	  this.$http.put('http://localhost:3000/supplements', supplement)
-	    .then(() => {
-	      this.supplements = this.supplements.map(s => {
-	        return s._id === supplement._id ? supplement : s;
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app) {
+	  app.factory('ParseService', function($http) {
+	    const service = {};
+	    service.plants = [];
+	    service.supplements = [];
+
+	    service.constructResource = function() {
+	      return function(addedResource) {
+	        let added = addedResource.data;
+	        for (let key in added) {
+	          if (key === 'zone') added[key] = parseInt(added[key]);
+	          added[key] = Array.isArray(added[key]) && added[key].length > 1 ? added[key].split(',') : added[key];
+	        }
+	        if (added.commonName) service.plants.push(added);
+	        if (added.name) service.supplements.push(added);
+	        return added;
+	      };
+	    };
+
+	    function fetchPlants() {
+	      return $http.get('http://localhost:3000/plants')
+	      .then((res) => {
+	        service.plants = res.data;
+	      }, (err) => {
+	        console.log(err);
 	      });
-	    }, (err) => {
-	      console.log(err);
-	    });
+	    }
+
+	    function fetchSupplements() {
+	      return $http.get('http://localhost:3000/supplements')
+	      .then((res) => {
+	        service.supplements = res.data;
+	      }, (err) => {
+	        console.log(err);
+	      });
+	    }
+
+	    service.update = function(cb) {
+	      console.log('updating');
+	      fetchPlants().then(() => {
+	        fetchSupplements().then(() => {
+	          cb();
+	        });
+	      });
+	    };
+
+	    return service;
+	  });
 	};
 
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<form ng-submit=\"submit(updated)\" class=\"resource-list\">\n  <h3>{{formMessage}}</h3>\n  <ul>\n    <li ng-repeat=\"property in resourceProps\">\n      <input type=\"text\" ng-model=\"updated[property]\" placeholder=\"{{property}}\">\n    </li>\n  </ul>\n\n<!-- need to route update/add depending on what's clicked -->\n  <button type=\"submit\" ng-click=\"update(updated)\">{{type | uppercase}} {{resource | uppercase}}</button>\n  <button type=\"submit\" ng-show=\"type === 'edit'\" ng-click=\"delete(currentresource)\">DELETE {{resource | uppercase}}</button>\n</form>\n";
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = "<div ng-if=\"plant\">\n  <ul>\n    <li><strong>{{currentresource.commonName}}</strong></li>\n    <li><em>{{currentresource.scientificName}}</em></li>\n    <li>Medicinal Uses: {{currentresource.medicinalUses}}</li>\n    <li>Nutritional Value: {{currentresource.nutritionalValue}}</li>\n    <li>Zone: {{currentresource.zone}}</li>\n  </ul>\n</div>\n\n<div ng-if=\"supplement\">\n  <ul>\n    <li><strong>{{currentresource.name}}</strong></li>\n    <li>Medicinal Effects: {{currentresource.medicinalEffects}}</li>\n    <li>Side Effects: {{currentresource.sideEffects}}</li>\n  </ul>\n</div>\n";
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = "<p ng-show=\"resource.commonName\">\n  <p>{{resource.commonName}}</p>\n</p>\n\n<p ng-show=\"resource.name\">\n  <p>{{resource.name}}</p>\n</p>\n";
 
 /***/ }
 /******/ ]);
